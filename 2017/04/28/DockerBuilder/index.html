@@ -1,0 +1,758 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="#一.Docker的环境搭建             前言：本章介绍下在Ubuntu上的环境搭建过程    1.首先介绍下Docker：    PS：具体的介绍我在这里就不再赘述了，本文主要具体介绍下搭建过程与使用方法。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker环境搭建与使用">
+<meta property="og:url" content="http://yoursite.com/2017/04/28/DockerBuilder/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="#一.Docker的环境搭建             前言：本章介绍下在Ubuntu上的环境搭建过程    1.首先介绍下Docker：    PS：具体的介绍我在这里就不再赘述了，本文主要具体介绍下搭建过程与使用方法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20160910100008323">
+<meta property="og:image" content="http://img.blog.csdn.net/20160910100658546">
+<meta property="og:image" content="http://img.blog.csdn.net/20160910101548407">
+<meta property="og:image" content="http://img.blog.csdn.net/20160910102504322">
+<meta property="og:image" content="http://img.blog.csdn.net/20160910105302894">
+<meta property="og:updated_time" content="2017-04-28T07:48:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker环境搭建与使用">
+<meta name="twitter:description" content="#一.Docker的环境搭建             前言：本章介绍下在Ubuntu上的环境搭建过程    1.首先介绍下Docker：    PS：具体的介绍我在这里就不再赘述了，本文主要具体介绍下搭建过程与使用方法。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160910100008323">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/28/DockerBuilder/"/>
+
+
+
+
+
+  <title> Docker环境搭建与使用 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/DockerBuilder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker环境搭建与使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T15:47:50+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#一.Docker的环境搭建<br>             前言：本章介绍下在Ubuntu上的环境搭建过程<br>    1.首先介绍下Docker：<br><img src="http://img.blog.csdn.net/20160910100008323" alt="这是Docker与传统的虚拟机服务差别"><br>    PS：具体的介绍我在这里就不再赘述了，本文主要具体介绍下搭建过程与使用方法。<br><a id="more"></a></p>
+<p>##2.那么首先我们来搭建Docker服务</p>
+<h4 id="①：命令：uname-a-查看当前Linux的内核版本"><a href="#①：命令：uname-a-查看当前Linux的内核版本" class="headerlink" title="①：命令：uname -a(查看当前Linux的内核版本)"></a>①：命令：uname -a(查看当前Linux的内核版本)</h4><p>保证内核版本高于3.08否则会出现安装失败<br><img src="http://img.blog.csdn.net/20160910100658546" alt="uname -a 命令"></p>
+<p>####②：命令：sudo apt-get install -y docker.io<br>        ps:有的教程会指出使用 sudo apt-get install docker ,该命令下安装的docker版本号可能过低，可能出现这种那种问题。<br>        运行命令：sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker<br>        运行命令：sudo sed -i ‘$acomplete -F _docker docker’ /etc/bash_completion.d/docker.io<br>        安装完成后运行命令 docker version查看是否安装成功<br><img src="http://img.blog.csdn.net/20160910101548407" alt="docker version命令"><br>        至此，docker服务已经搭建完毕了。</p>
+<p>##3.创建docker容器的镜像</p>
+<p>####①：命令：sudo docker pull ubuntu:14.04//搭建容器的环境<br>            PS：过程大概需要下载60M左右的文件，会耗费一点时间（建议在VPN环境下）</p>
+<p>####②：命令：sudo docker images //查看镜像</p>
+<p><img src="http://img.blog.csdn.net/20160910102504322" alt="sudo docker "><br>            Ps:这是我所创建的一些镜像，可以看到最小的镜像只有100多M。</p>
+<p>##4.拥有镜像之后，可以通过镜像创建容器<br>        这里有一个警告：创建 的容器在exit后无法保存修改。（具体解决办法在后面会介绍）</p>
+<p>我们可以通过IMAGE ID 或者REPOSITORY来创建容器。<br>        命令：sudo docker run -i -t -v /home/lwc/:/data/software/ 4a725d3b3b1c /bin/bash //启动容器<br>        其中</p>
+<h4 id="ps-docker-run-lt-相关参数-gt-lt-镜像-ID-gt-lt-初始命令-gt"><a href="#ps-docker-run-lt-相关参数-gt-lt-镜像-ID-gt-lt-初始命令-gt" class="headerlink" title="ps:  docker run &lt;相关参数&gt; &lt;镜像 ID&gt; &lt;初始命令&gt;"></a>ps:  docker run &lt;相关参数&gt; &lt;镜像 ID&gt; &lt;初始命令&gt;</h4><p>-i：表示以“交互模式”运行容器<br>-t：表示容器启动后会进入其命令行<br>-v：表示需要将本地哪个目录挂载到容器中，<br>格式：-v &lt;宿主机目录&gt;:&lt;容器目录&gt;<br>-v 参数我推荐在创建第一个容器的时候加上，把宿主机的你想要的文件copy到容器的你想要的位置。</p>
+<p>比如说你的宿主机上有jdk 你可以吧jdk打个包copy到home目录下然后跟平时一样搭建好java的开发环境。</p>
+<p>注意：先别急着exit<br>运行命令：sudo docker ps//查看目前正在运行的docker<br><img src="http://img.blog.csdn.net/20160910105302894" alt="这里写图片描述"><br>可以看到你正在运行的容器信息，<br>前面我提到若过现在你exit那么就不会保存你的修改。<br>不过你可以把这个容器保存提交为一个新的镜像</p>
+<p>####命令：docker commit CONTAINER ID 你的自定义的新容器的名字//只有这个方法能把操作过的容器保存起来以后接着用<br>注意：现有镜像后有容器<br>保存之后 运行：exit。<br>接着命令：sudo docker images就可以看到做过修改的容器被保存提交为新的镜像。</p>
+<p>二：docker的使用：<br>迁移容器和镜像：</p>
+<p>##export与import命令使用：</p>
+<p>export导出容器会丢失历史记录和元数据，类似与快照</p>
+<p>先创建测试容器：</p>
+<p>$ sudo docker exec web touch /opt/test.txt</p>
+<p>$ sudo docker exec web ls /opt</p>
+<p>test.txt</p>
+<p>执行导出：</p>
+<p>$ sudo docker export web &gt; web.tar</p>
+<p>执行导入：</p>
+<p>$ cat web.tar | sudo docker import - web:v2</p>
+<p>$ sudo docker images</p>
+<p>wKiom1aHmtuhyu9UAAAHiNrmLo0553.png$ sudo docker run -itd –name web_v2 web:v2 /bin/bash</p>
+<p>启动这个镜像要加/bin/bash，否则报错Error response from daemon: No command specified</p>
+<p>$ sudo docker exec web_v2 ls /opt</p>
+<p>test.txt</p>
+<p>总结：通过export命令也可以将容器里的数据保存，并可以迁移到别的docker主机 </p>
+<p>save与load命令使用：</p>
+<p>一般用于迁移镜像到别处</p>
+<p>导出：</p>
+<p>$ sudo docker save web &gt; web.tar</p>
+<p>导入：</p>
+<p>$ sudo docker load &lt; ubuntu.tar</p>
+<p>注：不会丢弃历史记录和元数据，并可以回滚版本。启动不用加/bin/bash<br>结尾。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/28/GoEasyWebFrameWork/" rel="next" title="GoHttps包完成简易Web框架">
+                <i class="fa fa-chevron-left"></i> GoHttps包完成简易Web框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/28/gubbinsOgGo/" rel="prev" title="Goalng杂碎">
+                Goalng杂碎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#①：命令：uname-a-查看当前Linux的内核版本"><span class="nav-number">1.</span> <span class="nav-text">①：命令：uname -a(查看当前Linux的内核版本)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ps-docker-run-lt-相关参数-gt-lt-镜像-ID-gt-lt-初始命令-gt"><span class="nav-number">2.</span> <span class="nav-text">ps:  docker run <相关参数> <镜像 ID> <初始命令></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

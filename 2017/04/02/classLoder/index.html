@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="类装载," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="类装载过程详解==在下文中请谨慎区分“装载”与“加载”==">
+<meta name="keywords" content="类装载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类装载过程">
+<meta property="og:url" content="http://yoursite.com/2017/04/02/classLoder/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="类装载过程详解==在下文中请谨慎区分“装载”与“加载”==">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/pic/classLoder/1.png">
+<meta property="og:image" content="http://yoursite.com/images/pic/classLoder/2.png">
+<meta property="og:image" content="http://yoursite.com/images/pic/classLoder/3.png">
+<meta property="og:image" content="http://yoursite.com/images/pic/classLoder/4.png">
+<meta property="og:updated_time" content="2017-04-02T04:07:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="类装载过程">
+<meta name="twitter:description" content="类装载过程详解==在下文中请谨慎区分“装载”与“加载”==">
+<meta name="twitter:image" content="http://yoursite.com/images/pic/classLoder/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/02/classLoder/"/>
+
+
+
+
+
+  <title> 类装载过程 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/02/classLoder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                类装载过程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-02T11:45:31+08:00">
+                2017-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="类装载过程详解"><a href="#类装载过程详解" class="headerlink" title="类装载过程详解"></a>类装载过程详解</h1><p>==在下文中请谨慎区分“装载”与“加载”==<br><a id="more"></a><br>系统装载class类型可以分为加载、连接、初始化。而连接又可以分为验证、准备、解释三个阶段。如下图所示：</p>
+<p><img src="/images/pic/classLoder/1.png" alt="image"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>虚拟机不会无故装载Class，只有在必须使用某类的时候才会加载该Class.必须使用Class情况有下面几种：</p>
+<ul>
+<li>new关键字创建对象实例的时候， 或者通过反射、克隆、反序列化的时候。</li>
+<li>调用类的静态方法即使用invokestatic字节码的时候。</li>
+<li>使用类或者借口的静态字段(final关键字标注的字段除外) 比如字节码 putstatic、getstatic。</li>
+<li>使用java.lang.refelct包中的方法反射该Class的时候。</li>
+<li>使用子类的前提是初始化父类。</li>
+<li>启动虚拟机的时候含有main()方法的类。<h2 id="加载类"><a href="#加载类" class="headerlink" title="加载类"></a>加载类</h2></li>
+</ul>
+<ol>
+<li>通过类的全名获取类的二进制数据流。</li>
+<li>解析类的二进制数据流为方法区内的数据结构。</li>
+<li>创建java.lang.Class实例</li>
+</ol>
+<p>Java虚拟机获取二进制数据流的方式有很多。最一般的就是通过读取.class文件，也可以从jar、zip归档文件中读取数据流。还可以从网络上获取二进制数据流甚至可以在程序运行时生成一段二进制数据流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class GetStringMethodes &#123;</div><div class="line">    public static void main(String[] args) throws ClassNotFoundException &#123;</div><div class="line">        Class clazz =Class.forName(&quot;java.lang.String&quot;);</div><div class="line">        Method[] methods = clazz.getDeclaredMethods();</div><div class="line">        for (Method m:methods) &#123;</div><div class="line">            String mod = Modifier.toString(m.getModifiers());</div><div class="line">            System.out.print(mod+&quot; &quot;+m.getName()+&quot;(&quot;);</div><div class="line">            Class&lt;?&gt;[] ps= m.getParameterTypes();</div><div class="line">            if(ps.length==0) System.out.println(&quot;)&quot;);</div><div class="line">            for(int i=0;i&lt;ps.length;i++)&#123;</div><div class="line">                char end=i==ps.length-1? &apos;)&apos;:&apos;,&apos;;</div><div class="line">                if (i==ps.length-1)&#123;</div><div class="line">                    System.out.println(ps[i].getSimpleName()+end);</div><div class="line">                &#125;else&#123;</div><div class="line">                    System.out.print(ps[i].getSimpleName()+end);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public toString()</div><div class="line">public hashCode()</div><div class="line">public volatile compareTo(Object)</div><div class="line">public compareTo(String)</div><div class="line">public indexOf(String,int)</div><div class="line">public trim()</div><div class="line">public toCharArray()</div><div class="line">public static transient format(Locale,String,Object[])</div><div class="line">public static transient format(String,Object[])</div><div class="line">public static copyValueOf(char[],int,int)</div><div class="line">public static copyValueOf(char[])</div><div class="line">public native intern()</div><div class="line">...省略其他输出</div><div class="line">Process finished with exit code 0</div></pre></td></tr></table></figure>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>==连接过程分为三步：<br>验证、准备、解释。==</p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p><img src="/images/pic/classLoder/2.png" alt="image"></p>
+<p>这里解释一下第四步：<br>Class文件会在其常量池中记录他即将引用的其他类或者方法。因此在验证阶段，虚拟机会检查这些即将被引用的类或者方法是否存在。并且验证是否有权限访问。如果找不到一个类则会抛出NoClassDefFoundError,如果是一个方法没有被找到那么就会抛出NoSuchMethodeError.</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>当一个Class通过验证的时候就会进入准备阶段。在这个阶段虚拟机会为该类分配内存空进，并且初始化一些数值。</p>
+<p><img src="/images/pic/classLoder/3.png" alt="image"></p>
+<p>如果存在常量，那么常量也会被赋值。该赋值操作属于虚拟机的行为，实际上在准备阶段不会有任何Java代码被执行。</p>
+<h3 id="解析类"><a href="#解析类" class="headerlink" title="解析类"></a>解析类</h3><p>经过准备阶段后，就进入了解析阶段。解析阶段会把类、方法、接口、字段等间接引用转为直接引用。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>如果之前的步骤都顺利完成那么就会进入最后一个阶段——初始化。<br>此时，类才会开始执行Java字节码。</p>
+<p>初始化的重要步骤是执行<cinit> <cinit>是由类的static字段或者static代码块生成的。我们可以简单理解为:该阶段就是要执行static代码段以及初始化静态字段。</cinit></cinit></p>
+<p>虚拟机在初始化一个子类之前总是会尝试先初始化父类。所以父类的<cinit>会在子类的<cinit>之前执行，即父类static代码段优先级高于子类static代码段。</cinit></cinit></p>
+<p>在某些情况之下，static会产生死锁问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class StaticA &#123;</div><div class="line">    static &#123;</div><div class="line">        try&#123;</div><div class="line">            Thread.sleep(1000);</div><div class="line">        &#125;catch (InterruptedException e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        try&#123;</div><div class="line">            Class.forName(&quot;StaticB&quot;);</div><div class="line">        &#125;catch (ClassNotFoundException e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;StaticA has finish init&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class StaticB &#123;</div><div class="line">    static &#123;</div><div class="line">        try&#123;</div><div class="line">            Thread.sleep(1000);</div><div class="line">        &#125;catch (InterruptedException e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        try&#123;</div><div class="line">            Class.forName(&quot;StaticA&quot;);</div><div class="line">        &#125;catch (ClassNotFoundException e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;StaticB has finish init&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class StaticDeadLockMain extends Thread&#123;</div><div class="line">    private char flag;</div><div class="line">    public StaticDeadLockMain(char flag)&#123;</div><div class="line">        this.flag = flag;</div><div class="line">        this.setName(&quot;Thread&quot;+flag);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">       try&#123;</div><div class="line">           Class.forName(&quot;Static&quot;+flag);</div><div class="line">       &#125;catch (ClassNotFoundException e)&#123;</div><div class="line">           e.printStackTrace();</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        StaticDeadLockMain loadA= new StaticDeadLockMain(&apos;A&apos;);</div><div class="line">        loadA.start();</div><div class="line">        StaticDeadLockMain loadB= new StaticDeadLockMain(&apos;B&apos;);</div><div class="line">        loadB.start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/pic/classLoder/4.png" alt="image"></p>
+<p>==static代码段产生死锁的问题确实存在。==</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/类装载/" rel="tag"># 类装载</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/31/GetWebContent/" rel="next" title="Java获取网页源代码">
+                <i class="fa fa-chevron-left"></i> Java获取网页源代码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/02/IOCAutoWire/" rel="prev" title="IOC容器的初始化与依赖注入过程">
+                IOC容器的初始化与依赖注入过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类装载过程详解"><span class="nav-number">1.</span> <span class="nav-text">类装载过程详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载类"><span class="nav-number">1.2.</span> <span class="nav-text">加载类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-number">1.3.</span> <span class="nav-text">连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">1.3.1.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">1.3.2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析类"><span class="nav-number">1.3.3.</span> <span class="nav-text">解析类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">1.4.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

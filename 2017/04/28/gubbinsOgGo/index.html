@@ -1,0 +1,757 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="记录一些比较基础的 chan 阻塞未完成的携程">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Goalng杂碎">
+<meta property="og:url" content="http://yoursite.com/2017/04/28/gubbinsOgGo/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="记录一些比较基础的 chan 阻塞未完成的携程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-28T13:07:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Goalng杂碎">
+<meta name="twitter:description" content="记录一些比较基础的 chan 阻塞未完成的携程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/28/gubbinsOgGo/"/>
+
+
+
+
+
+  <title> Goalng杂碎 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/gubbinsOgGo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Goalng杂碎
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T21:03:49+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Golang/" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="记录一些比较基础的"><a href="#记录一些比较基础的" class="headerlink" title="记录一些比较基础的"></a>记录一些比较基础的</h1><hr>
+<h2 id="chan-阻塞未完成的携程"><a href="#chan-阻塞未完成的携程" class="headerlink" title="chan 阻塞未完成的携程"></a>chan 阻塞未完成的携程</h2><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import(</div><div class="line">       &quot;fmt&quot;</div><div class="line">       &quot;time&quot;</div><div class="line">       &quot;runtime&quot;</div><div class="line">)</div><div class="line">var threadNum=100</div><div class="line">var threadChannel chan int</div><div class="line">func main()&#123;</div><div class="line">       beginTime := time.Now()</div><div class="line">       maxProcess := runtime.NumCPU()</div><div class="line">       runtime.GOMAXPROCS(maxProcess)</div><div class="line">       threadChannel=make(chan int,threadNum)</div><div class="line">       for i:=0;i&lt;threadNum;i++&#123;</div><div class="line">              go Printer(i)</div><div class="line">       &#125;</div><div class="line">       for i:=0;i&lt;threadNum;i++&#123;</div><div class="line">              &lt;-threadChannel</div><div class="line">       &#125;</div><div class="line">       finishTime :=time.Now()</div><div class="line">       fmt.Println(&quot;timeDuring&quot;,finishTime.Sub(beginTime))</div><div class="line">&#125;</div><div class="line">func Printer(a int)()&#123;</div><div class="line">       time.Sleep(2000 * time.Millisecond)</div><div class="line">       fmt.Printf(&quot;Thread num %d\n&quot;,a)</div><div class="line">       threadChannel &lt;- 1</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">o := NewOrm()</div><div class="line">err := o.Begin()// 事务处理过程......// 此过程中的所有使用 o Ormer 对象的查询都在事务处理范围内if SomeError &#123;</div><div class="line">    err = o.Rollback()&#125; else &#123;</div><div class="line">    err = o.Commit()&#125;</div></pre></td></tr></table></figure>
+<h2 id="自定义错误处理-e-g-404"><a href="#自定义错误处理-e-g-404" class="headerlink" title="自定义错误处理 e.g.404"></a>自定义错误处理 e.g.404</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package controllers</div><div class="line"></div><div class="line">import (</div><div class="line">       &quot;github.com/astaxie/beego&quot;</div><div class="line">)</div><div class="line"></div><div class="line">type ErrorController struct &#123;</div><div class="line">       beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (c *ErrorController) Error404() &#123;</div><div class="line">       c.Data[&quot;content&quot;] = &quot;page not found&quot;</div><div class="line">       c.TplName = &quot;404.tpl&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (c *ErrorController) Error501() &#123;</div><div class="line">       c.Data[&quot;content&quot;] = &quot;server error&quot;</div><div class="line">       c.TplName = &quot;501.tpl&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">func (c *ErrorController) ErrorDb() &#123;</div><div class="line">       c.Data[&quot;content&quot;] = &quot;database is now down&quot;</div><div class="line">       c.TplName = &quot;dberror.tpl&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="beego-POST-JSon数据时候的空值问题"><a href="#beego-POST-JSon数据时候的空值问题" class="headerlink" title="beego POST JSon数据时候的空值问题"></a>beego POST JSon数据时候的空值问题</h2><p>在 API 的开发中，我们经常会用到 JSON 或 XML 来作为数据交互的格式，如何在 beego 中获取 Request Body 里的 JSON 或 XML 的数据呢？</p>
+<pre><code>1. 在配置文件里设置 copyrequestbody = true
+
+2. 在 Controller 中
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">func (this *ObejctController) Post() &#123;</div><div class="line">    var ob models.Object</div><div class="line">    json.Unmarshal(this.Ctx.Input.RequestBody, &amp;ob)</div><div class="line">    objectid := models.AddOne(ob)</div><div class="line">    this.Data[&quot;json&quot;] = &quot;&#123;\&quot;ObjectId\&quot;:\&quot;&quot; + objectid + &quot;\&quot;&#125;&quot;</div><div class="line">    this.ServeJson()&#125;</div></pre></td></tr></table></figure>
+<p>注释很关键。</p>
+<h2 id="beego-handler上的注解详解"><a href="#beego-handler上的注解详解" class="headerlink" title="beego handler上的注解详解"></a>beego handler上的注解详解</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// @Title getStaticBlock// @Description get all the staticblock by key</div><div class="line">// @Param   key     path    string  true        &quot;The email for login&quot;</div><div class="line">// @Success 200 &#123;object&#125; models.ZDTCustomer.Customer</div><div class="line">// @Failure 400 Invalid email supplied</div><div class="line">// @Failure 404 User not found</div><div class="line">// @router /staticblock/:key [get]</div></pre></td></tr></table></figure>
+<p>首先是 CMSController 定义上面的注释，这个是用来显示这个模块的作用。接下来就是每一个函数上面的注释，这里列出来支持的各种注释：</p>
+<pre><code>* @Title
+</code></pre><p>这个 API 所表达的含义，是一个文本，空格之后的内容全部解析为 title</p>
+<pre><code>* @Description
+</code></pre><p>这个 API 详细的描述，是一个文本，空格之后的内容全部解析为 Description</p>
+<pre><code>* @Param
+</code></pre><p>参数，表示需要传递到服务器端的参数，有五列参数，使用空格或者 tab 分割，五个分别表示的含义如下</p>
+<pre><code>* 
+    1. 参数名
+
+
+    2. 参数类型，可以有的值是 formData、query、path、body、header，formData 表示是 post 请求的数据，query 表示带在 url 之后的参数，path 表示请求路径上得参数，例如上面例子里面的 key，body 表示是一个 raw 数据请求，header 表示带在 header 信息中得参数。
+
+
+    3. 参数类型
+
+
+    4. 是否必须
+
+
+    5. 注释
+
+
+
+* @Success
+</code></pre><p>成功返回给客户端的信息，三个参数，第一个是 status code。第二个参数是返回的类型，必须使用 {} 包含，第三个是返回的对象或者字符串信息，如果是 {object} 类型，那么 bee 工具在生成 docs 的时候会扫描对应的对象，这里填写的是想对你项目的目录名和对象，例如 models.ZDTProduct.ProductList 就表示 /models/ZDTProduct 目录下的 ProductList 对象。<br>三个参数必须通过空格分隔</p>
+<pre><code>* @Failure
+</code></pre><p>失败返回的信息，包含两个参数，使用空格分隔，第一个表示 status code，第二个表示错误信息</p>
+<pre><code>* @router
+</code></pre><p>路由信息，包含两个参数，使用空格分隔，第一个是请求的路由地址，支持正则和自定义路由，和之前的路由规则一样，第二个参数是支持的请求方法,放在 [] 之中，如果有多个方法，那么使用 , 分隔。</p>
+<h2 id="beego开启orm反向工程"><a href="#beego开启orm反向工程" class="headerlink" title="beego开启orm反向工程"></a>beego开启orm反向工程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">orm.RegisterModel(new(User))</div><div class="line">orm.RegisterDriver(&quot;mysql&quot;, orm.DRMySQL)</div><div class="line">orm.RegisterDataBase(&quot;default&quot;, &quot;mysql&quot;, &quot;root:root@/beego_orm_test?charset=utf8&quot;)</div><div class="line">name := &quot;default&quot;</div><div class="line">// drop table 后再建表</div><div class="line">force := false</div><div class="line">// 打印执行过程</div><div class="line">verbose := true</div><div class="line">// 遇到错误立即返回</div><div class="line">err := orm.RunSyncdb(name, force, verbose)</div><div class="line">if err != nil &#123;</div><div class="line">       fmt.Println(err)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/28/DockerBuilder/" rel="next" title="Docker环境搭建与使用">
+                <i class="fa fa-chevron-left"></i> Docker环境搭建与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/05/ReversePolishType/" rel="prev" title="ReversePolishType(逆波兰式算法解析)">
+                ReversePolishType(逆波兰式算法解析) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#记录一些比较基础的"><span class="nav-number">1.</span> <span class="nav-text">记录一些比较基础的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#chan-阻塞未完成的携程"><span class="nav-number">1.1.</span> <span class="nav-text">chan 阻塞未完成的携程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务管理"><span class="nav-number">1.2.</span> <span class="nav-text">事务管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义错误处理-e-g-404"><span class="nav-number">1.3.</span> <span class="nav-text">自定义错误处理 e.g.404</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beego-POST-JSon数据时候的空值问题"><span class="nav-number">1.4.</span> <span class="nav-text">beego POST JSon数据时候的空值问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beego-handler上的注解详解"><span class="nav-number">1.5.</span> <span class="nav-text">beego handler上的注解详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beego开启orm反向工程"><span class="nav-number">1.6.</span> <span class="nav-text">beego开启orm反向工程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

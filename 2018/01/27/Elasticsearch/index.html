@@ -1,0 +1,768 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Elasticsearch搜索引擎," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Using Elasticsearch搜索引擎Environment java环境 Elasticsearch Kibana mysqlStart Using你可以从 elastic 的官网 elastic.co/downloads/elasticsearch 获取最新版本的 Elasticsearch  1curl -L -O https://artifacts.elastic.co/downl">
+<meta name="keywords" content="Elasticsearch搜索引擎">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch搜索引擎">
+<meta property="og:url" content="http://yoursite.com/2018/01/27/Elasticsearch/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="Using Elasticsearch搜索引擎Environment java环境 Elasticsearch Kibana mysqlStart Using你可以从 elastic 的官网 elastic.co/downloads/elasticsearch 获取最新版本的 Elasticsearch  1curl -L -O https://artifacts.elastic.co/downl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-27T07:04:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch搜索引擎">
+<meta name="twitter:description" content="Using Elasticsearch搜索引擎Environment java环境 Elasticsearch Kibana mysqlStart Using你可以从 elastic 的官网 elastic.co/downloads/elasticsearch 获取最新版本的 Elasticsearch  1curl -L -O https://artifacts.elastic.co/downl">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/27/Elasticsearch/"/>
+
+
+
+
+
+  <title> Elasticsearch搜索引擎 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/Elasticsearch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Elasticsearch搜索引擎
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-27T18:01:29+08:00">
+                2018-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang-lucene/" itemprop="url" rel="index">
+                    <span itemprop="name">golang lucene</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Using-Elasticsearch搜索引擎"><a href="#Using-Elasticsearch搜索引擎" class="headerlink" title="Using Elasticsearch搜索引擎"></a>Using Elasticsearch搜索引擎</h1><h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><ol>
+<li>java环境</li>
+<li>Elasticsearch</li>
+<li>Kibana</li>
+<li>mysql<h2 id="Start-Using"><a href="#Start-Using" class="headerlink" title="Start Using"></a>Start Using</h2>你可以从 elastic 的官网 elastic.co/downloads/elasticsearch 获取最新版本的 Elasticsearch</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.6.tar.gz</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xvf elasticsearch-5.6.6.tar.gz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd elasticsearch-5.6.6/bin</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./elasticsearch</div></pre></td></tr></table></figure>
+<p>==可以详细阅读以下配置文件elasticsearch.yml==</p>
+<p>成功启动输出:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">./elasticsearch</div><div class="line">[2018-01-27T09:44:57,842][INFO ][o.e.n.Node               ] [] initializing ...</div><div class="line">[2018-01-27T09:44:57,960][INFO ][o.e.e.NodeEnvironment    ] [En-tHLt] using [1] data paths, mounts [[/ (/dev/disk1)]], net usable_space [167gb], net total_space [232.5gb], types [hfs]</div><div class="line">[2018-01-27T09:44:57,960][INFO ][o.e.e.NodeEnvironment    ] [En-tHLt] heap size [990.7mb], compressed ordinary object pointers [true]</div><div class="line">[2018-01-27T09:44:57,990][INFO ][o.e.n.Node               ] node name [En-tHLt] derived from node ID [En-tHLt0TlSTPXD9baXjbQ]; set [node.name] to override</div><div class="line">[2018-01-27T09:44:57,990][INFO ][o.e.n.Node               ] version[6.1.2], pid[1368], build[5b1fea5/2018-01-10T02:35:59.208Z], OS[Mac OS X/10.12.6/x86_64], JVM[Oracle Corporation/Java HotSpot(TM) 64-Bit Server VM/1.8.0_121/25.121-b13]</div><div class="line">[2018-01-27T09:44:57,990][INFO ][o.e.n.Node               ] JVM arguments [-Xms1g, -Xmx1g, -XX:+UseConcMarkSweepGC, -XX:CMSInitiatingOccupancyFraction=75, -XX:+UseCMSInitiatingOccupancyOnly, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -XX:+HeapDumpOnOutOfMemoryError, -Des.path.home=/Users/bighandsome/Documents/elasticsearch, -Des.path.conf=/Users/bighandsome/Documents/elasticsearch/config]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [aggs-matrix-stats]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [analysis-common]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [ingest-common]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [lang-expression]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [lang-mustache]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [lang-painless]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [mapper-extras]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [parent-join]</div><div class="line">[2018-01-27T09:44:58,925][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [percolator]</div><div class="line">[2018-01-27T09:44:58,926][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [reindex]</div><div class="line">[2018-01-27T09:44:58,926][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [repository-url]</div><div class="line">[2018-01-27T09:44:58,926][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [transport-netty4]</div><div class="line">[2018-01-27T09:44:58,926][INFO ][o.e.p.PluginsService     ] [En-tHLt] loaded module [tribe]</div><div class="line">[2018-01-27T09:44:58,927][INFO ][o.e.p.PluginsService     ] [En-tHLt] no plugins loaded</div><div class="line">[2018-01-27T09:45:00,635][INFO ][o.e.d.DiscoveryModule    ] [En-tHLt] using discovery type [zen]</div><div class="line">[2018-01-27T09:45:01,182][INFO ][o.e.n.Node               ] initialized</div><div class="line">[2018-01-27T09:45:01,182][INFO ][o.e.n.Node               ] [En-tHLt] starting ...</div><div class="line">[2018-01-27T09:45:01,428][INFO ][o.e.t.TransportService   ] [En-tHLt] publish_address &#123;127.0.0.1:9300&#125;, bound_addresses &#123;[::1]:9300&#125;, &#123;127.0.0.1:9300&#125;</div><div class="line">[2018-01-27T09:45:04,501][INFO ][o.e.c.s.MasterService    ] [En-tHLt] zen-disco-elected-as-master ([0] nodes joined), reason: new_master &#123;En-tHLt&#125;&#123;En-tHLt0TlSTPXD9baXjbQ&#125;&#123;SE6_wSZkTLmGvTIQpMHXTQ&#125;&#123;127.0.0.1&#125;&#123;127.0.0.1:9300&#125;</div><div class="line">[2018-01-27T09:45:04,506][INFO ][o.e.c.s.ClusterApplierService] [En-tHLt] new_master &#123;En-tHLt&#125;&#123;En-tHLt0TlSTPXD9baXjbQ&#125;&#123;SE6_wSZkTLmGvTIQpMHXTQ&#125;&#123;127.0.0.1&#125;&#123;127.0.0.1:9300&#125;, reason: apply cluster state (from master [master &#123;En-tHLt&#125;&#123;En-tHLt0TlSTPXD9baXjbQ&#125;&#123;SE6_wSZkTLmGvTIQpMHXTQ&#125;&#123;127.0.0.1&#125;&#123;127.0.0.1:9300&#125; committed version [1] source [zen-disco-elected-as-master ([0] nodes joined)]])</div><div class="line">[2018-01-27T09:45:04,530][INFO ][o.e.h.n.Netty4HttpServerTransport] [En-tHLt] publish_address &#123;127.0.0.1:9200&#125;, bound_addresses &#123;[::1]:9200&#125;, &#123;127.0.0.1:9200&#125;</div><div class="line">[2018-01-27T09:45:04,530][INFO ][o.e.n.Node               ] [En-tHLt] started</div><div class="line">[2018-01-27T09:45:04,718][INFO ][o.e.g.GatewayService     ] [En-tHLt] recovered [3] indices into cluster_state</div><div class="line">[2018-01-27T09:45:05,149][INFO ][o.e.c.r.a.AllocationService] [En-tHLt] Cluster health status changed from [RED] to [YELLOW] (reason: [shards started [[megacorp][2]] ...]).</div></pre></td></tr></table></figure>
+<p>接着启动Kibana</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd Kibana/bin</div><div class="line">./kibana</div></pre></td></tr></table></figure>
+<p>成功启动输出:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">./kibana</div><div class="line">  log   [01:47:19.506] [info][status][plugin:kibana@6.1.2] Status changed from uninitialized to green - Ready</div><div class="line">  log   [01:47:19.561] [info][status][plugin:elasticsearch@6.1.2] Status changed from uninitialized to yellow - Waiting for Elasticsearch</div><div class="line">  log   [01:47:19.594] [info][status][plugin:console@6.1.2] Status changed from uninitialized to green - Ready</div><div class="line">  log   [01:47:19.613] [info][status][plugin:metrics@6.1.2] Status changed from uninitialized to green - Ready</div><div class="line">  log   [01:47:19.922] [info][status][plugin:timelion@6.1.2] Status changed from uninitialized to green - Ready</div><div class="line">  log   [01:47:19.926] [info][listening] Server running at http://localhost:5601</div><div class="line">  log   [01:47:19.949] [info][status][plugin:elasticsearch@6.1.2] Status changed from yellow to green - Ready</div></pre></td></tr></table></figure>
+<p>当然端口号是可以配置的，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat config/kibana.yml</div></pre></td></tr></table></figure>
+<p>至此单节点的Elasticsearch已经可以使用了，准确的说是在我们启动Elasticsearch之后就可以使用了，Kibana是我们用来方便管理的插件。</p>
+<h2 id="简单操作"><a href="#简单操作" class="headerlink" title="简单操作"></a>简单操作</h2><p>Elasticsearch对主流语言提供了支持，在这里我们选择同用的RESTful方式</p>
+<p>所有其他语言可以使用 RESTful API 通过端口 9200 和 Elasticsearch 进行通信，你可以用你最喜爱的 web 客户端访问 Elasticsearch 。事实上，正如你所看到的，你甚至可以使用 curl 命令来和 Elasticsearch 交互。</p>
+<h3 id="增加某一项"><a href="#增加某一项" class="headerlink" title="增加某一项"></a>增加某一项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PUT /megacorp/employee/1</div><div class="line">&#123;</div><div class="line">    &quot;first_name&quot; : &quot;John&quot;,</div><div class="line">    &quot;last_name&quot; :  &quot;Smith&quot;,</div><div class="line">    &quot;age&quot; :        25,</div><div class="line">    &quot;about&quot; :      &quot;I love to go rock climbing&quot;,</div><div class="line">    &quot;interests&quot;: [ &quot;sports&quot;, &quot;music&quot; ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意，路径 /megacorp/employee/1 包含了三部分的信息：</p>
+<p>megacorp<br>索引名称<br>employee<br>类型名称<br>1<br>特定雇员的ID</p>
+<p>再放2个:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">PUT /megacorp/employee/2</div><div class="line">&#123;</div><div class="line">    &quot;first_name&quot; :  &quot;Jane&quot;,</div><div class="line">    &quot;last_name&quot; :   &quot;Smith&quot;,</div><div class="line">    &quot;age&quot; :         32,</div><div class="line">    &quot;about&quot; :       &quot;I like to collect rock albums&quot;,</div><div class="line">    &quot;interests&quot;:  [ &quot;music&quot; ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">PUT /megacorp/employee/3</div><div class="line">&#123;</div><div class="line">    &quot;first_name&quot; :  &quot;Douglas&quot;,</div><div class="line">    &quot;last_name&quot; :   &quot;Fir&quot;,</div><div class="line">    &quot;age&quot; :         35,</div><div class="line">    &quot;about&quot;:        &quot;I like to build cabinets&quot;,</div><div class="line">    &quot;interests&quot;:  [ &quot;forestry&quot; ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="检索文档"><a href="#检索文档" class="headerlink" title="检索文档"></a>检索文档</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GET /megacorp/employee/1</div></pre></td></tr></table></figure>
+<h3 id="轻量搜索"><a href="#轻量搜索" class="headerlink" title="轻量搜索"></a>轻量搜索</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GET /megacorp/employee/_search</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   &quot;took&quot;:      6,</div><div class="line">   &quot;timed_out&quot;: false,</div><div class="line">   &quot;_shards&quot;: &#123; ... &#125;,</div><div class="line">   &quot;hits&quot;: &#123;</div><div class="line">      &quot;total&quot;:      3,</div><div class="line">      &quot;max_score&quot;:  1,</div><div class="line">      &quot;hits&quot;: [</div><div class="line">         &#123;</div><div class="line">            &quot;_index&quot;:         &quot;megacorp&quot;,</div><div class="line">            &quot;_type&quot;:          &quot;employee&quot;,</div><div class="line">            &quot;_id&quot;:            &quot;3&quot;,</div><div class="line">            &quot;_score&quot;:         1,</div><div class="line">            &quot;_source&quot;: &#123;</div><div class="line">               &quot;first_name&quot;:  &quot;Douglas&quot;,</div><div class="line">               &quot;last_name&quot;:   &quot;Fir&quot;,</div><div class="line">               &quot;age&quot;:         35,</div><div class="line">               &quot;about&quot;:       &quot;I like to build cabinets&quot;,</div><div class="line">               &quot;interests&quot;: [ &quot;forestry&quot; ]</div><div class="line">            &#125;</div><div class="line">         &#125;,</div><div class="line">         &#123;</div><div class="line">            &quot;_index&quot;:         &quot;megacorp&quot;,</div><div class="line">            &quot;_type&quot;:          &quot;employee&quot;,</div><div class="line">            &quot;_id&quot;:            &quot;1&quot;,</div><div class="line">            &quot;_score&quot;:         1,</div><div class="line">            &quot;_source&quot;: &#123;</div><div class="line">               &quot;first_name&quot;:  &quot;John&quot;,</div><div class="line">               &quot;last_name&quot;:   &quot;Smith&quot;,</div><div class="line">               &quot;age&quot;:         25,</div><div class="line">               &quot;about&quot;:       &quot;I love to go rock climbing&quot;,</div><div class="line">               &quot;interests&quot;: [ &quot;sports&quot;, &quot;music&quot; ]</div><div class="line">            &#125;</div><div class="line">         &#125;,</div><div class="line">         &#123;</div><div class="line">            &quot;_index&quot;:         &quot;megacorp&quot;,</div><div class="line">            &quot;_type&quot;:          &quot;employee&quot;,</div><div class="line">            &quot;_id&quot;:            &quot;2&quot;,</div><div class="line">            &quot;_score&quot;:         1,</div><div class="line">            &quot;_source&quot;: &#123;</div><div class="line">               &quot;first_name&quot;:  &quot;Jane&quot;,</div><div class="line">               &quot;last_name&quot;:   &quot;Smith&quot;,</div><div class="line">               &quot;age&quot;:         32,</div><div class="line">               &quot;about&quot;:       &quot;I like to collect rock albums&quot;,</div><div class="line">               &quot;interests&quot;: [ &quot;music&quot; ]</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      ]</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="匹配搜索"><a href="#匹配搜索" class="headerlink" title="匹配搜索"></a>匹配搜索</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /megacorp/employee/_search</div><div class="line">&#123;</div><div class="line">    &quot;query&quot; : &#123;</div><div class="line">        &quot;match&quot; : &#123;</div><div class="line">            &quot;last_name&quot; : &quot;Smith&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="全文搜索"><a href="#全文搜索" class="headerlink" title="全文搜索"></a>全文搜索</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /megacorp/employee/_search</div><div class="line">&#123;</div><div class="line">    &quot;query&quot; : &#123;</div><div class="line">        &quot;match&quot; : &#123;</div><div class="line">            &quot;about&quot; : &quot;rock climbing&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="短语搜索"><a href="#短语搜索" class="headerlink" title="短语搜索"></a>短语搜索</h3><p>找出一个属性中的独立单词是没有问题的，但有时候想要精确匹配一系列单词或者短语 。 比如， 我们想执行这样一个查询，仅匹配同时包含 “rock” 和 “climbing” ，并且 二者以短语 “rock climbing” 的形式紧挨着的雇员记录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /megacorp/employee/_search</div><div class="line">&#123;</div><div class="line">    &quot;query&quot; : &#123;</div><div class="line">        &quot;match_phrase&quot; : &#123;</div><div class="line">            &quot;about&quot; : &quot;rock climbing&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="剩余特性"><a href="#剩余特性" class="headerlink" title="剩余特性"></a>剩余特性</h3><p>其他语法已经特性参照《Elasticsearch权威指南》</p>
+<h2 id="数据库导入"><a href="#数据库导入" class="headerlink" title="数据库导入"></a>数据库导入</h2><p>如果我们想要搜索的数据在数据库中该怎么办呢。</p>
+<ol>
+<li>配置mysql文件</li>
+<li>使用tool<h3 id="配置mysql文件"><a href="#配置mysql文件" class="headerlink" title="配置mysql文件"></a>配置mysql文件</h3>我的 my.cnf</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div></pre></td><td class="code"><pre><div class="line"># Example MySQL config file for medium systems.</div><div class="line">  #</div><div class="line">  # This is for a system with little memory (32M - 64M) where MySQL plays</div><div class="line">  # an important part, or systems up to 128M where MySQL is used together with</div><div class="line">  # other programs (such as a web server)</div><div class="line">  #</div><div class="line">  # MySQL programs look for option files in a set of</div><div class="line">  # locations which depend on the deployment platform.</div><div class="line">  # You can copy this option file to one of those</div><div class="line">  # locations. For information about these locations, see:</div><div class="line">  # http://dev.mysql.com/doc/mysql/en/option-files.html</div><div class="line">  #</div><div class="line">  # In this file, you can use all long options that a program supports.</div><div class="line">  # If you want to know which options a program supports, run the program</div><div class="line">  # with the &quot;--help&quot; option.</div><div class="line">  # The following options will be passed to all MySQL clients</div><div class="line">  [client]</div><div class="line">  default-character-set=utf8</div><div class="line">  #password   = your_password</div><div class="line">  port        = 3306</div><div class="line">  socket      = /tmp/mysql.sock</div><div class="line">  # Here follows entries for some specific programs</div><div class="line">  # The MySQL server</div><div class="line">  [mysqld]</div><div class="line">  character-set-server=utf8</div><div class="line">  init_connect=&apos;SET NAMES utf8</div><div class="line">  port        = 3306</div><div class="line">  socket      = /tmp/mysql.sock</div><div class="line">  skip-external-locking</div><div class="line">  key_buffer_size = 16M</div><div class="line">  max_allowed_packet = 1M</div><div class="line">  table_open_cache = 64</div><div class="line">  sort_buffer_size = 512K</div><div class="line">  net_buffer_length = 8K</div><div class="line">  read_buffer_size = 256K</div><div class="line">  read_rnd_buffer_size = 512K</div><div class="line">  myisam_sort_buffer_size = 8M</div><div class="line">  character-set-server=utf8</div><div class="line">  init_connect=&apos;SET NAMES utf8&apos;</div><div class="line"># Don&apos;t listen on a TCP/IP port at all. This can be a security enhancement,</div><div class="line"># if all processes that need to connect to mysqld run on the same host.</div><div class="line"># All interaction with mysqld must be made via Unix sockets or named pipes.</div><div class="line"># Note that using this option without enabling named pipes on Windows</div><div class="line"># (via the &quot;enable-named-pipe&quot; option) will render mysqld useless!</div><div class="line">#</div><div class="line">#skip-networking</div><div class="line"></div><div class="line">  # Replication Master Server (default)</div><div class="line">  # binary logging is required for replication</div><div class="line">  log-bin=mysql-bin</div><div class="line"></div><div class="line">    # binary logging format - mixed recommended</div><div class="line">    binlog_format=ROW</div><div class="line">      # required unique id between 1 and 2^32 - 1</div><div class="line">      # defaults to 1 if master-host is not set</div><div class="line">      # but will not function as a master if omitted</div><div class="line">      server-id   = 1</div><div class="line"></div><div class="line">    # Replication Slave (comment out master section to use this)</div><div class="line">    #</div><div class="line">    # To configure this host as a replication slave, you can choose between</div><div class="line">    # two methods :</div><div class="line">    #</div><div class="line">    # 1) Use the CHANGE MASTER TO command (fully described in our manual) -</div><div class="line">    #    the syntax is:</div><div class="line">    #</div><div class="line">    #    CHANGE MASTER TO MASTER_HOST=&lt;host&gt;, MASTER_PORT=&lt;port&gt;,</div><div class="line">    #    MASTER_USER=&lt;user&gt;, MASTER_PASSWORD=&lt;password&gt; ;</div><div class="line">    #</div><div class="line">    #    where you replace &lt;host&gt;, &lt;user&gt;, &lt;password&gt; by quoted strings and</div><div class="line">    #    &lt;port&gt; by the master&apos;s port number (3306 by default).</div><div class="line">    #</div><div class="line">    #    Example:</div><div class="line">    #</div><div class="line">    #    CHANGE MASTER TO MASTER_HOST=&apos;125.564.12.1&apos;, MASTER_PORT=3306,</div><div class="line">    #    MASTER_USER=&apos;joe&apos;, MASTER_PASSWORD=&apos;secret&apos;;</div><div class="line">    #</div><div class="line">    # OR</div><div class="line">    #</div><div class="line">    # 2) Set the variables below. However, in case you choose this method, then</div><div class="line">    #    start replication for the first time (even unsuccessfully, for example</div><div class="line">    #    if you mistyped the password in master-password and the slave fails to</div><div class="line">    #    connect), the slave will create a master.info file, and any later</div><div class="line">    #    change in this file to the variables&apos; values below will be ignored and</div><div class="line">    #    overridden by the content of the master.info file, unless you shutdown</div><div class="line">    #    the slave server, delete master.info and restart the slaver server.</div><div class="line">    #    For that reason, you may want to leave the lines below untouched</div><div class="line">    #    (commented) and instead use CHANGE MASTER TO (see above)</div><div class="line">    #</div><div class="line">    # required unique id between 2 and 2^32 - 1</div><div class="line">    # (and different from the master)</div><div class="line">    # defaults to 2 if master-host is set</div><div class="line">    # but will not function as a slave if omitted</div><div class="line">    #server-id       = 2</div><div class="line">    #</div><div class="line">    # The replication master for this slave - required</div><div class="line">    #master-host     =   &lt;hostname&gt;</div><div class="line">    #</div><div class="line">    # The username the slave will use for authentication when connecting</div><div class="line">    # to the master - required</div><div class="line">    #master-user     =   &lt;username&gt;</div><div class="line">    #</div><div class="line">    # The password the slave will authenticate with when connecting to</div><div class="line">    # the master - required</div><div class="line">    #master-password =   &lt;password&gt;</div><div class="line">    #</div><div class="line">    # The port the master is listening on.</div><div class="line">    # optional - defaults to 3306</div><div class="line">    #master-port     =  &lt;port&gt;</div><div class="line">    #</div><div class="line">    # binary logging - not required for slaves, but recommended</div><div class="line">    #log-bin=mysql-bin</div><div class="line"></div><div class="line">      # Uncomment the following if you are using InnoDB tables</div><div class="line">      #innodb_data_home_dir = /usr/local/mysql/data</div><div class="line">      #innodb_data_file_path = ibdata1:10M:autoextend</div><div class="line">      #innodb_log_group_home_dir = /usr/local/mysql/data</div><div class="line">      # You can set .._buffer_pool_size up to 50 - 80 %</div><div class="line">      # of RAM but beware of setting memory usage too high</div><div class="line">      #innodb_buffer_pool_size = 16M</div><div class="line">      #innodb_additional_mem_pool_size = 2M</div><div class="line">      # Set .._log_file_size to 25 % of buffer pool size</div><div class="line">      #innodb_log_file_size = 5M</div><div class="line">      #innodb_log_buffer_size = 8M</div><div class="line">      #innodb_flush_log_at_trx_commit = 1</div><div class="line">      #innodb_lock_wait_timeout = 50</div><div class="line"></div><div class="line">        [mysqldump]</div><div class="line">        quick</div><div class="line">        max_allowed_packet = 16M</div><div class="line"></div><div class="line">          [mysql]</div><div class="line">          no-auto-rehash</div><div class="line">          # Remove the next comment character if you are not familiar with SQL</div><div class="line">          #safe-updates</div><div class="line">          default-character-set=utf8</div><div class="line"></div><div class="line">        [myisamchk]</div><div class="line">        key_buffer_size = 20M</div><div class="line">        sort_buffer_size = 20M</div><div class="line">        read_buffer = 2M</div><div class="line">        write_buffer = 2M</div><div class="line"></div><div class="line">          [mysqlhotcopy]</div><div class="line">          interactive-timeout</div></pre></td></tr></table></figure>
+<h3 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h3><ol>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go get github.com/siddontang/go-mysql-elasticsearch</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd $GOPATH/src/github.com/siddontang/go-mysql-elasticsearch</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure>
+</li>
+<li><p>Start ./bin/go-mysql-elasticsearch -config=./etc/river.toml and enjoy it.</p>
+</li>
+</ol>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"># MySQL address, user and password</div><div class="line"># user must have replication privilege in MySQL.</div><div class="line">my_addr = &quot;127.0.0.1:3306&quot;</div><div class="line">my_user = &quot;root&quot;</div><div class="line">my_pass = &quot;root&quot;</div><div class="line"></div><div class="line"># Elasticsearch address</div><div class="line">es_addr = &quot;127.0.0.1:9200&quot;</div><div class="line"># Path to store data, like master.info, and dump MySQL data</div><div class="line">data_dir = &quot;./var&quot;</div><div class="line"># Inner Http status address</div><div class="line">stat_addr = &quot;127.0.0.1:12800&quot;</div><div class="line"></div><div class="line"># pseudo server id like a slave</div><div class="line">server_id = 1001</div><div class="line"></div><div class="line"># mysql or mariadb</div><div class="line">flavor = &quot;mysql&quot;</div><div class="line"># mysqldump execution path</div><div class="line">mysqldump = &quot;mysqldump&quot;</div><div class="line"></div><div class="line"># MySQL data source</div><div class="line">[[source]]</div><div class="line">schema = &quot;bysj&quot;</div><div class="line"></div><div class="line"># Only below tables will be synced into Elasticsearch.</div><div class="line"># &quot;test_river_[0-9]&#123;4&#125;&quot; is a wildcard table format, you can use it if you have many sub tables, like table_0000 - table_1023</div><div class="line"># I don&apos;t think it is necessary to sync all tables in a database.</div><div class="line">tables = [&quot;goods&quot;]</div><div class="line"></div><div class="line"># Below is for special rule mapping</div><div class="line">[[rule]]</div><div class="line">schema = &quot;bysj&quot;</div><div class="line">table = &quot;goods&quot;</div><div class="line">index = &quot;goods_name&quot;</div></pre></td></tr></table></figure>
+<p>大致就是这样。。</p>
+<h1 id="回见"><a href="#回见" class="headerlink" title="回见~"></a>回见~</h1>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Elasticsearch搜索引擎/" rel="tag"># Elasticsearch搜索引擎</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/07/Raft/" rel="next" title="Raft">
+                <i class="fa fa-chevron-left"></i> Raft
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/25/RabinKarp/" rel="prev" title="RabinKarp算法">
+                RabinKarp算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-Elasticsearch搜索引擎"><span class="nav-number">1.</span> <span class="nav-text">Using Elasticsearch搜索引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment"><span class="nav-number">1.1.</span> <span class="nav-text">Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Start-Using"><span class="nav-number">1.2.</span> <span class="nav-text">Start Using</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单操作"><span class="nav-number">1.3.</span> <span class="nav-text">简单操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增加某一项"><span class="nav-number">1.3.1.</span> <span class="nav-text">增加某一项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检索文档"><span class="nav-number">1.3.2.</span> <span class="nav-text">检索文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量搜索"><span class="nav-number">1.3.3.</span> <span class="nav-text">轻量搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配搜索"><span class="nav-number">1.3.4.</span> <span class="nav-text">匹配搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全文搜索"><span class="nav-number">1.3.5.</span> <span class="nav-text">全文搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短语搜索"><span class="nav-number">1.3.6.</span> <span class="nav-text">短语搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#剩余特性"><span class="nav-number">1.3.7.</span> <span class="nav-text">剩余特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库导入"><span class="nav-number">1.4.</span> <span class="nav-text">数据库导入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置mysql文件"><span class="nav-number">1.4.1.</span> <span class="nav-text">配置mysql文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tools"><span class="nav-number">1.4.2.</span> <span class="nav-text">tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">1.4.3.</span> <span class="nav-text">配置文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回见"><span class="nav-number">2.</span> <span class="nav-text">回见~</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

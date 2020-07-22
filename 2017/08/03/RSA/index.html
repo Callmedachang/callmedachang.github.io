@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RSA算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="RSA非对称加密、验签模拟场景 A与B对接 A司拥有一对RSA密钥 APublicKey、APrivateKey B司拥有一对RSA密钥 BPublicKey、BPrivateKey 数据有三大模块 透明参数 业务参数（需要加密处理） 签名   A 与 B互相知晓对方的公钥 密钥对通过OpenSSL生成数字签名与验证签名的重要性我们的数据传输是基于HTTP协议的，A与B在通信的过程中，可能遭遇数据">
+<meta name="keywords" content="RSA算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA非对称加密、签名">
+<meta property="og:url" content="http://yoursite.com/2017/08/03/RSA/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="RSA非对称加密、验签模拟场景 A与B对接 A司拥有一对RSA密钥 APublicKey、APrivateKey B司拥有一对RSA密钥 BPublicKey、BPrivateKey 数据有三大模块 透明参数 业务参数（需要加密处理） 签名   A 与 B互相知晓对方的公钥 密钥对通过OpenSSL生成数字签名与验证签名的重要性我们的数据传输是基于HTTP协议的，A与B在通信的过程中，可能遭遇数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-14T09:03:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RSA非对称加密、签名">
+<meta name="twitter:description" content="RSA非对称加密、验签模拟场景 A与B对接 A司拥有一对RSA密钥 APublicKey、APrivateKey B司拥有一对RSA密钥 BPublicKey、BPrivateKey 数据有三大模块 透明参数 业务参数（需要加密处理） 签名   A 与 B互相知晓对方的公钥 密钥对通过OpenSSL生成数字签名与验证签名的重要性我们的数据传输是基于HTTP协议的，A与B在通信的过程中，可能遭遇数据">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/03/RSA/"/>
+
+
+
+
+
+  <title> RSA非对称加密、签名 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/03/RSA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RSA非对称加密、签名
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-03T19:33:50+08:00">
+                2017-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/加密-解密/" itemprop="url" rel="index">
+                    <span itemprop="name">加密/解密</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="RSA非对称加密、验签"><a href="#RSA非对称加密、验签" class="headerlink" title="RSA非对称加密、验签"></a>RSA非对称加密、验签</h1><h2 id="模拟场景"><a href="#模拟场景" class="headerlink" title="模拟场景"></a>模拟场景</h2><ul>
+<li>A与B对接</li>
+<li>A司拥有一对RSA密钥 APublicKey、APrivateKey</li>
+<li>B司拥有一对RSA密钥 BPublicKey、BPrivateKey</li>
+<li>数据有三大模块<ol>
+<li>透明参数</li>
+<li>业务参数（需要加密处理）</li>
+<li>签名</li>
+</ol>
+</li>
+<li>A 与 B互相知晓对方的公钥</li>
+<li>密钥对通过OpenSSL生成<h2 id="数字签名与验证签名的重要性"><a href="#数字签名与验证签名的重要性" class="headerlink" title="数字签名与验证签名的重要性"></a>数字签名与验证签名的重要性</h2>我们的数据传输是基于HTTP协议的，A与B在通信的过程中，可能遭遇数据劫持，C在截取到A发给B的数据之后，如果修改部分数据，再次发给B就造成了灾难。所以我们需要一个条件来确定过数据是最原始的数据。这就是签名存在的目的。</li>
+</ul>
+<p>广义上的签名是对数据做一个摘要，可以通过数据得到签名，但是不能通过签名逆向得到数据。</p>
+<a id="more"></a>
+<h2 id="A与B数据通信加密解密逻辑"><a href="#A与B数据通信加密解密逻辑" class="headerlink" title="A与B数据通信加密解密逻辑"></a>A与B数据通信加密解密逻辑</h2><p>假设A向B发送数据：</p>
+<p>透明参数是不包含业务参数的参数字段，例如时间戳，字符集等要素。我们不需要对其进行加密处理。</p>
+<p>业务参数：A使用B的公钥（BPublicKey）进行加密，那么只有拥有B公司私钥的才能解密出其中的数据（也就是B公司自己）<br>具体的代码实现（golang）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">func UsualParamsEncrypt(data interface&#123;&#125;, publicKey string) (encryptParams string, err error) &#123;</div><div class="line">	dataByte, err := json.Marshal(data)</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	pStr, err := crypt.EncryptPKCS1v15(dataByte, []byte(publicKey))</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	return pStr, nil</div><div class="line">&#125;</div><div class="line">//rsa公钥加密</div><div class="line">func EncryptPKCS1v15(origData, publicKey []byte) (string, error) &#123;</div><div class="line">	block, _ := pem.Decode(publicKey)</div><div class="line">	if block == nil &#123;</div><div class="line">		return &quot;&quot;, errors.New(&quot;publicKey error&quot;)</div><div class="line">	&#125;</div><div class="line">	var err error</div><div class="line">	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	pub := pubInterface.(*rsa.PublicKey)</div><div class="line">	encrypted := make([]byte, 0, len(origData))</div><div class="line">	for i := 0; i &lt; len(origData); i += 117 &#123;</div><div class="line">		if i+117 &lt; len(origData) &#123;</div><div class="line">			partial, _ := rsa.EncryptPKCS1v15(rand.Reader, pub, origData[i:i+117])</div><div class="line"></div><div class="line">			encrypted = append(encrypted, partial...)</div><div class="line">		&#125; else &#123;</div><div class="line">			partial, _ := rsa.EncryptPKCS1v15(rand.Reader, pub, origData[i:])</div><div class="line"></div><div class="line">			encrypted = append(encrypted, partial...)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return base64.StdEncoding.EncodeToString(encrypted), nil</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在完成参数之后需要对业务数据进行签名，A使用自己的私钥（APrivateKey）,那么所有拥有A公钥的公司就能知道数据是否是完整的、未被篡改的，具体的代码实现（golang）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">func UsualSign(param http.Values, APrivateKey string) (signedStr string, err error) &#123;</div><div class="line">	signedStr, err = crypt.SignPKCS1v15([]byte(param.Encode()), []byte(wrPrivateKey), crypto.SHA1)</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	return</div><div class="line">&#125;</div><div class="line">func SignPKCS1v15(origData, privateKey []byte, hash crypto.Hash) (string, error) &#123;</div><div class="line">	h := hash.New()</div><div class="line">	h.Write(origData)</div><div class="line">	digest := h.Sum(nil)</div><div class="line"></div><div class="line">	block, _ := pem.Decode(privateKey)</div><div class="line">	if block == nil &#123;</div><div class="line">		return &quot;&quot;, errors.New(&quot;privateKey key error&quot;)</div><div class="line">	&#125;</div><div class="line">	var pri *rsa.PrivateKey</div><div class="line">	var err error</div><div class="line">	if hash == crypto.MD5 &#123;</div><div class="line">		pubInterface, err := x509.ParsePKCS8PrivateKey(block.Bytes)</div><div class="line">		if err != nil &#123;</div><div class="line">			return &quot;&quot;, err</div><div class="line">		&#125;</div><div class="line">		pri = pubInterface.(*rsa.PrivateKey)</div><div class="line">	&#125; else &#123;</div><div class="line">		pri, err = x509.ParsePKCS1PrivateKey(block.Bytes)</div><div class="line">		if err != nil &#123;</div><div class="line">			return &quot;&quot;, err</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	data, err := rsa.SignPKCS1v15(nil, pri, hash, digest)</div><div class="line">	if err != nil &#123;</div><div class="line">		fmt.Errorf(&quot;rsaSign SignPKCS1v15 error&quot;)</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	return base64.StdEncoding.EncodeToString(data), nil</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="随后我们把角色从A转换到B"><a href="#随后我们把角色从A转换到B" class="headerlink" title="随后我们把角色从A转换到B"></a>随后我们把角色从A转换到B</h2><p>在签名确认之前用B自己的私钥（BPrivateKey）解密参数代码实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">func UsualParamsDecrypt(paramsStr string, wrPrivateKey string) (encryptParams string, err error) &#123;</div><div class="line">	decodeData, err := base64.StdEncoding.DecodeString(paramsStr)</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, errors.New(&quot;Base64 DecodeString error&quot;)</div><div class="line">	&#125;</div><div class="line">	pStr, err := RSADecrypt(decodeData, []byte(wrPrivateKey))</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	return pStr, nil</div><div class="line">&#125;</div><div class="line">//DecryptRSA decrypt given []byte with RSA algorithm</div><div class="line">func RSADecrypt(data, privateKey []byte) (string, error) &#123;</div><div class="line">	block, _ := pem.Decode(privateKey)</div><div class="line">	if block == nil &#123;</div><div class="line">		return &quot;&quot;, errors.New(&quot;privateKey error&quot;)</div><div class="line">	&#125;</div><div class="line">	privInterface, err := x509.ParsePKCS1PrivateKey(block.Bytes)</div><div class="line">	if err != nil &#123;</div><div class="line">		return &quot;&quot;, err</div><div class="line">	&#125;</div><div class="line">	decrypted := make([]byte, 0, len(data))</div><div class="line">	partial, _ := rsa.DecryptPKCS1v15(rand.Reader, privInterface, data)</div><div class="line">	decrypted = append(decrypted, partial...)</div><div class="line">	return string(decrypted), nil</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>之后我们需要验证签名，来确保数据是未被篡改过的，使用A的公钥（APublicKey）代码实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">func UsualVerifySign(paramWithoutSign http.Values, signStr string, publicKey string) error &#123;</div><div class="line">	decodeData, err := base64.StdEncoding.DecodeString(signStr)</div><div class="line">	if err != nil &#123;</div><div class="line">		return errors.New(&quot;Base64 DecodeString error&quot;)</div><div class="line">	&#125;</div><div class="line">	err = crypt.VerifyPKCS1v15([]byte(paramWithoutSign.Encode()), decodeData, []byte(publicKey), crypto.SHA1)</div><div class="line">	if err != nil &#123;</div><div class="line">		return errors.New(&quot;VerifySign error&quot;)</div><div class="line">	&#125;</div><div class="line">	return nil</div><div class="line">&#125;</div><div class="line">// rsa 验签</div><div class="line">func VerifyPKCS1v15(origData, signedData, publicKey []byte, hash crypto.Hash) error &#123;</div><div class="line">	h := hash.New()</div><div class="line">	h.Write(origData)</div><div class="line">	digest := h.Sum(nil)</div><div class="line">	block, _ := pem.Decode(publicKey)</div><div class="line">	if block == nil &#123;</div><div class="line">		return errors.New(&quot;public key error&quot;)</div><div class="line">	&#125;</div><div class="line">	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)</div><div class="line">	if err != nil &#123;</div><div class="line">		return err</div><div class="line">	&#125;</div><div class="line">	pub := pubInterface.(*rsa.PublicKey)</div><div class="line"></div><div class="line">	return rsa.VerifyPKCS1v15(pub, hash, digest, signedData)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还有一点就是我们需要把解密后的数据通过BASE64再次加密在传输，一是为了加密强度，而是为了保证加密解密的安全性。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RSA算法/" rel="tag"># RSA算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/16/BinTree/" rel="next" title="BinTree(二叉树)">
+                <i class="fa fa-chevron-left"></i> BinTree(二叉树)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/05/databaseAICD/" rel="prev" title="数据库事务隔离级别与AICD特性">
+                数据库事务隔离级别与AICD特性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA非对称加密、验签"><span class="nav-number">1.</span> <span class="nav-text">RSA非对称加密、验签</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟场景"><span class="nav-number">1.1.</span> <span class="nav-text">模拟场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数字签名与验证签名的重要性"><span class="nav-number">1.2.</span> <span class="nav-text">数字签名与验证签名的重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A与B数据通信加密解密逻辑"><span class="nav-number">1.3.</span> <span class="nav-text">A与B数据通信加密解密逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随后我们把角色从A转换到B"><span class="nav-number">1.4.</span> <span class="nav-text">随后我们把角色从A转换到B</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

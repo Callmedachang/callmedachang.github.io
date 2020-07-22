@@ -1,0 +1,725 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Reverse polish type algorithm逆波兰式算法说的通俗一点就是把中叙表达式转为右叙表达式。举个例子他可以解析数学表达式。假设一个数学表达式：56+78*(25+69/3) 他的中叙表达式：[56,+,78,*,(,25,+,69,/,3,)] 他的右叙表达式：[56,78,25,69,3,/,+,*,+]">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReversePolishType(逆波兰式算法解析)">
+<meta property="og:url" content="http://yoursite.com/2017/05/05/ReversePolishType/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="Reverse polish type algorithm逆波兰式算法说的通俗一点就是把中叙表达式转为右叙表达式。举个例子他可以解析数学表达式。假设一个数学表达式：56+78*(25+69/3) 他的中叙表达式：[56,+,78,*,(,25,+,69,/,3,)] 他的右叙表达式：[56,78,25,69,3,/,+,*,+]">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/pic/RPTA/RPTA.png">
+<meta property="og:updated_time" content="2017-05-05T12:52:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ReversePolishType(逆波兰式算法解析)">
+<meta name="twitter:description" content="Reverse polish type algorithm逆波兰式算法说的通俗一点就是把中叙表达式转为右叙表达式。举个例子他可以解析数学表达式。假设一个数学表达式：56+78*(25+69/3) 他的中叙表达式：[56,+,78,*,(,25,+,69,/,3,)] 他的右叙表达式：[56,78,25,69,3,/,+,*,+]">
+<meta name="twitter:image" content="http://yoursite.com/images/pic/RPTA/RPTA.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/05/ReversePolishType/"/>
+
+
+
+
+
+  <title> ReversePolishType(逆波兰式算法解析) | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/05/ReversePolishType/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ReversePolishType(逆波兰式算法解析)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-05T20:35:29+08:00">
+                2017-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Reverse-polish-type-algorithm"><a href="#Reverse-polish-type-algorithm" class="headerlink" title="Reverse polish type algorithm"></a>Reverse polish type algorithm</h1><h2 id="逆波兰式算法"><a href="#逆波兰式算法" class="headerlink" title="逆波兰式算法"></a>逆波兰式算法</h2><p>说的通俗一点就是把中叙表达式转为右叙表达式。举个例子他可以解析数学表达式。<br>假设一个数学表达式：56+78*(25+69/3)</p>
+<p>他的中叙表达式：[56,+,78,*,(,25,+,69,/,3,)]</p>
+<p>他的右叙表达式：[56,78,25,69,3,/,+,*,+]<br><a id="more"></a><br>看到有序表达式之后机器可以从左到右依次执行得到结果</p>
+<p>那么问题就是要怎么把中叙表达式转化为右叙表达式：我花了蛮多的时间画出了逆波兰式算法的流程图：(画了好久求赞0.0)</p>
+<p><img src="/images/pic/RPTA/RPTA.png" alt="image"><br>最后提出Java实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">public class Calculate &#123;</div><div class="line">    // 判断是否为操作符号</div><div class="line">    public static boolean isOperator(String operator) &#123;</div><div class="line">        if (operator.equals(&quot;+&quot;) || operator.equals(&quot;-&quot;)</div><div class="line">                || operator.equals(&quot;*&quot;) || operator.equals(&quot;/&quot;)</div><div class="line">                || operator.equals(&quot;(&quot;) || operator.equals(&quot;)&quot;))</div><div class="line">            return true;</div><div class="line">        else</div><div class="line">            return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 设置操作符号的优先级别</div><div class="line">    public static int priority(String operator) &#123;</div><div class="line">        if (operator.equals(&quot;+&quot;) || operator.equals(&quot;-&quot;))</div><div class="line">            return 1;</div><div class="line">        else if (operator.equals(&quot;*&quot;) || operator.equals(&quot;/&quot;))</div><div class="line">            return 2;</div><div class="line">        else</div><div class="line">            return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 做2值之间的计算</div><div class="line">    public static String twoResult(String operator, String a, String b) &#123;</div><div class="line">        try &#123;</div><div class="line">            String op = operator;</div><div class="line">            String rs = new String();</div><div class="line">            double x = Double.parseDouble(b);</div><div class="line">            double y = Double.parseDouble(a);</div><div class="line">            double z = 0;</div><div class="line">            if (op.equals(&quot;+&quot;))</div><div class="line">                z = x + y;</div><div class="line">            else if (op.equals(&quot;-&quot;))</div><div class="line">                z = x - y;</div><div class="line">            else if (op.equals(&quot;*&quot;))</div><div class="line">                z = x * y;</div><div class="line">            else if (op.equals(&quot;/&quot;))</div><div class="line">                z = x / y;</div><div class="line">            else</div><div class="line">                z = 0;</div><div class="line">            return rs + z;</div><div class="line">        &#125; catch (NumberFormatException e) &#123;</div><div class="line">            System.out.println(&quot;input has something wrong!&quot;);</div><div class="line">            return &quot;Error&quot;;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line">public class Expression &#123;</div><div class="line">    private ArrayList expression = new ArrayList();// 存储中序表达式</div><div class="line"></div><div class="line">    private ArrayList right = new ArrayList();// 存储右序表达式</div><div class="line"></div><div class="line">    private String result;// 结果</div><div class="line"></div><div class="line">    // 依据输入信息创建对象，将数值与操作符放入ArrayList中</div><div class="line">    private Expression(String input) &#123;</div><div class="line">        StringTokenizer st = new StringTokenizer(input, &quot;+-*/()&quot;, true);</div><div class="line">        while (st.hasMoreElements()) &#123;</div><div class="line">            String s=st.nextToken();</div><div class="line">            expression.add(s);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 将中序表达式转换为右序表达式</div><div class="line">    private void toRight() &#123;</div><div class="line">        Stacks aStack = new Stacks();</div><div class="line">        String operator;</div><div class="line">        int position = 0;</div><div class="line">        while (true) &#123;</div><div class="line">            if (Calculate.isOperator((String) expression.get(position))) &#123;</div><div class="line">                if (aStack.top == -1</div><div class="line">                        || ((String) expression.get(position)).equals(&quot;(&quot;)) &#123;</div><div class="line">                    aStack.push(expression.get(position));</div><div class="line">                &#125; else &#123;</div><div class="line">                    if (((String) expression.get(position)).equals(&quot;)&quot;)) &#123;</div><div class="line">                        while(true)&#123;</div><div class="line"></div><div class="line">                            if (aStack.top != -1&amp;&amp;!((String) aStack.top()).equals(&quot;(&quot;)) &#123;</div><div class="line">                                operator = (String) aStack.pop();</div><div class="line">                                right.add(operator);</div><div class="line">                            &#125;else&#123;</div><div class="line">                                if(aStack.top != -1)</div><div class="line">                                    aStack.pop();</div><div class="line">                                break;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    &#125; else &#123;</div><div class="line">                        while(true)&#123;</div><div class="line">                            if (aStack.top != -1&amp;&amp;Calculate.priority((String) expression.get(position)) &lt;= Calculate.priority((String) aStack.top())) &#123;</div><div class="line">                                operator = (String) aStack.pop();</div><div class="line">                                if (!operator.equals(&quot;(&quot;))</div><div class="line">                                    right.add(operator);</div><div class="line">                            &#125;else&#123;</div><div class="line">                                break;</div><div class="line">                            &#125;</div><div class="line"></div><div class="line">                        &#125;</div><div class="line">                        aStack.push(expression.get(position));</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; else</div><div class="line">                right.add(expression.get(position));</div><div class="line">            position++;</div><div class="line">            if (position &gt;= expression.size())</div><div class="line">                break;</div><div class="line">        &#125;</div><div class="line">        while (aStack.top != -1) &#123;</div><div class="line">            operator = (String) aStack.pop();</div><div class="line">            if(!operator.equals(&quot;(&quot;))</div><div class="line">                right.add(operator);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 对右序表达式进行求值</div><div class="line">    private void getResult() &#123;</div><div class="line">        this.toRight();</div><div class="line">        for(int i=0;i&lt;right.size();i++)&#123;</div><div class="line">            System.out.println(right.get(i));</div><div class="line">        &#125;</div><div class="line">        Stacks aStack = new Stacks();</div><div class="line">        String op1, op2, is = null;</div><div class="line">        Iterator it = right.iterator();</div><div class="line"></div><div class="line">        while (it.hasNext()) &#123;</div><div class="line">            is = (String) it.next();</div><div class="line">            if (Calculate.isOperator(is)) &#123;</div><div class="line">                op1 = (String) aStack.pop();</div><div class="line">                op2 = (String) aStack.pop();</div><div class="line">                aStack.push(Calculate.twoResult(is, op1, op2));</div><div class="line">            &#125; else</div><div class="line">                aStack.push(is);</div><div class="line">        &#125;</div><div class="line">        result = (String) aStack.pop();</div><div class="line">        it = expression.iterator();</div><div class="line">        while (it.hasNext()) &#123;</div><div class="line">            System.out.print((String) it.next());</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;=&quot; + result);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String avg[]) &#123;</div><div class="line">        Expression boya = new Expression(&quot;56+78*(25+69/3)&quot;);</div><div class="line">        boya.getResult();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Stacks&#123;</div><div class="line">    private LinkedList list=new LinkedList();</div><div class="line">    int top=-1;</div><div class="line">    public void push(Object value)&#123;</div><div class="line">        top++;</div><div class="line">        list.addFirst(value);</div><div class="line">    &#125;</div><div class="line">    public Object pop()&#123;</div><div class="line">        Object temp=list.getFirst();</div><div class="line">        top--;</div><div class="line">        list.removeFirst();</div><div class="line">        return temp;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    public Object top()&#123;</div><div class="line">        return list.getFirst();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可能最近几天会贴一下Golang的实现。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/28/gubbinsOgGo/" rel="next" title="Goalng杂碎">
+                <i class="fa fa-chevron-left"></i> Goalng杂碎
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/16/BinTree/" rel="prev" title="BinTree(二叉树)">
+                BinTree(二叉树) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Reverse-polish-type-algorithm"><span class="nav-number">1.</span> <span class="nav-text">Reverse polish type algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#逆波兰式算法"><span class="nav-number">1.1.</span> <span class="nav-text">逆波兰式算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

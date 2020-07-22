@@ -1,0 +1,739 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="微信跳一跳外挂," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="微信跳一跳外挂实现原理 adb截图命令 接收图片 找到起点 找到目标点 计算距离 计算按压时间 adb命令输出算法详解">
+<meta name="keywords" content="微信跳一跳外挂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信跳一跳外挂">
+<meta property="og:url" content="http://yoursite.com/2018/01/05/jump/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="微信跳一跳外挂实现原理 adb截图命令 接收图片 找到起点 找到目标点 计算距离 计算按压时间 adb命令输出算法详解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/IMG_3326.png">
+<meta property="og:image" content="http://yoursite.com/images/IMG_3327.png">
+<meta property="og:updated_time" content="2018-01-06T03:43:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信跳一跳外挂">
+<meta name="twitter:description" content="微信跳一跳外挂实现原理 adb截图命令 接收图片 找到起点 找到目标点 计算距离 计算按压时间 adb命令输出算法详解">
+<meta name="twitter:image" content="http://yoursite.com/images/IMG_3326.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/05/jump/"/>
+
+
+
+
+
+  <title> 微信跳一跳外挂 | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/05/jump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                微信跳一跳外挂
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-05T18:01:29+08:00">
+                2018-01-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="微信跳一跳外挂"><a href="#微信跳一跳外挂" class="headerlink" title="微信跳一跳外挂"></a>微信跳一跳外挂</h1><h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><ol>
+<li>adb截图命令</li>
+<li>接收图片</li>
+<li>找到起点</li>
+<li>找到目标点</li>
+<li>计算距离</li>
+<li>计算按压时间</li>
+<li>adb命令输出<h2 id="算法详解"><a href="#算法详解" class="headerlink" title="算法详解"></a>算法详解</h2><a id="more"></a>
+adb命令这里就不赘述了，相关请自行百度。<h3 id="起点算法"><a href="#起点算法" class="headerlink" title="起点算法"></a>起点算法</h3>获取小人的RGB域<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">func getGuyPosition(m image.Image) (x, y float32) &#123;</div><div class="line">	maxX := m.Bounds().Max.X</div><div class="line">	maxY := m.Bounds().Max.Y</div><div class="line">	lenOut, startOut, outJ := 0, 0, 0</div><div class="line">	error := float64(1560)</div><div class="line">	for j := 600; j &lt; maxY; j = j + 2 &#123;</div><div class="line">		//跳动人的RGB</div><div class="line">		var zeroPointR, zeroPointG, zeroPointB = uint32(54*256), uint32(52*256), uint32(92*256)</div><div class="line">		end, start := 0, 0</div><div class="line">		isBackground := true</div><div class="line">		for i := 0; i &lt; maxX-1; i++ &#123;</div><div class="line">			//当前像素点RGB</div><div class="line">			r, g, b, _ := m.At(i, j).RGBA()</div><div class="line">			//跳动小人的RGB判断范围误差10个色度</div><div class="line">			if abs(r-zeroPointR) &lt; error &amp;&amp; abs(g-zeroPointG) &lt; error &amp;&amp; abs(b-zeroPointB) &lt; error &#123;</div><div class="line">				if !isBackground &#123;</div><div class="line">					end = i</div><div class="line">					if end-start &gt; lenOut &#123;</div><div class="line">						lenOut = end - start</div><div class="line">						startOut = start</div><div class="line">						outJ = j</div><div class="line">						isBackground = true</div><div class="line">						break</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125; else &#123;</div><div class="line">				if isBackground &#123;</div><div class="line">					start = i</div><div class="line">					isBackground = false</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	x = float32(startOut + lenOut/2)</div><div class="line">	y = float32(outJ)</div><div class="line">	return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="终点算法"><a href="#终点算法" class="headerlink" title="终点算法"></a>终点算法</h3><p>通过大量截图可发先，从上到下终点目标块总是在最上面的，所以把目标可以明确为找出第一块的中心点坐标即为终点坐标</p>
+<h4 id="从左到右扫描"><a href="#从左到右扫描" class="headerlink" title="从左到右扫描"></a>从左到右扫描</h4><p><img src="/images/IMG_3326.png" alt="image"><br>避开影音干扰，代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">func getCenterPointLeft(m image.Image) (x, y float32) &#123;</div><div class="line">	maxX := m.Bounds().Max.X</div><div class="line">	maxY := m.Bounds().Max.Y</div><div class="line">	len := 0</div><div class="line">LOOP:</div><div class="line">	for j := 600; j &lt; maxY; j = j + 2 &#123;</div><div class="line">		//背景色RGB</div><div class="line">		zeroPointR, zeroPointG, zeroPointB, _ := m.At(maxX-3, j).RGBA()</div><div class="line">		start, end := 0, 0</div><div class="line">		isBackground := true</div><div class="line">		for i := 0; i &lt; maxX-1; i++ &#123;</div><div class="line">			//当前像素点RGB</div><div class="line">			r, g, b, _ := m.At(i, j).RGBA()</div><div class="line">			if r == zeroPointR &amp;&amp; g == zeroPointG &amp;&amp; b == zeroPointB &#123;</div><div class="line">				if !isBackground &#123;</div><div class="line">					end = i</div><div class="line">					if end &gt; len &#123;</div><div class="line">						len = end</div><div class="line">						isBackground = true</div><div class="line">						break</div><div class="line">					&#125; else &#123;</div><div class="line">						x = float32((end-start)/2 + start)</div><div class="line">						y = float32(j)</div><div class="line">						if x &gt; 200 &#123;</div><div class="line">							break LOOP</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125; else &#123;</div><div class="line">				if isBackground &#123;</div><div class="line">					start = i</div><div class="line">					isBackground = false</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="从右到左扫描"><a href="#从右到左扫描" class="headerlink" title="从右到左扫描"></a>从右到左扫描</h4><p><img src="/images/IMG_3327.png" alt="image"><br>规避小人干扰，代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">func getCenterPointRight(m image.Image) (x, y float32) &#123;</div><div class="line">	// and preserve aspect ratio</div><div class="line">	maxX := m.Bounds().Max.X</div><div class="line">	maxY := m.Bounds().Max.Y</div><div class="line">LOOP:</div><div class="line">	for j := 600; j &lt; maxY; j++ &#123;</div><div class="line">		//背景色RGB</div><div class="line">		zeroPointR, zeroPointG, zeroPointB, _ := m.At(maxX-3, j).RGBA()</div><div class="line">		start := 0</div><div class="line">		isBackground := true</div><div class="line">		for i := maxX - 1; i &gt; 1; i-- &#123;</div><div class="line">			r, g, b, _ := m.At(i, j).RGBA()</div><div class="line">			if r == zeroPointR &amp;&amp; g == zeroPointG &amp;&amp; b == zeroPointB &#123;</div><div class="line">				continue</div><div class="line">			&#125; else &#123;</div><div class="line">				if isBackground &#123;</div><div class="line">					start = i</div><div class="line">					isBackground = false</div><div class="line">				&#125;</div><div class="line">				if i &lt;= start &#123;</div><div class="line">					x = float32(start)</div><div class="line">					y = float32(j)</div><div class="line">					break LOOP</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="干扰规避"><a href="#干扰规避" class="headerlink" title="干扰规避"></a>干扰规避</h3><ul>
+<li>人物干扰</li>
+<li>阴影干扰</li>
+<li>花纹干扰</li>
+<li>渐变干扰<h3 id="github地址：https-github-com-Callmedachang-jumponejump"><a href="#github地址：https-github-com-Callmedachang-jumponejump" class="headerlink" title="github地址：https://github.com/Callmedachang/jumponejump"></a>github地址：<a href="https://github.com/Callmedachang/jumponejump" target="_blank" rel="external">https://github.com/Callmedachang/jumponejump</a></h3></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微信跳一跳外挂/" rel="tag"># 微信跳一跳外挂</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/golang3des/" rel="next" title="golang3des">
+                <i class="fa fa-chevron-left"></i> golang3des
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/06/Etcd/" rel="prev" title="Use ETCD As Service Discovery And Register In Micro Server System">
+                Use ETCD As Service Discovery And Register In Micro Server System <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微信跳一跳外挂"><span class="nav-number">1.</span> <span class="nav-text">微信跳一跳外挂</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">1.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法详解"><span class="nav-number">1.2.</span> <span class="nav-text">算法详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#起点算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">起点算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终点算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">终点算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#从左到右扫描"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">从左到右扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从右到左扫描"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">从右到左扫描</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#干扰规避"><span class="nav-number">1.2.3.</span> <span class="nav-text">干扰规避</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#github地址：https-github-com-Callmedachang-jumponejump"><span class="nav-number">1.2.4.</span> <span class="nav-text">github地址：https://github.com/Callmedachang/jumponejump</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

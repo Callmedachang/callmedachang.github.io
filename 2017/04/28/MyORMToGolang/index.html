@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="GolangORM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="自己编写简易的GoORM Go最近开始变得热门起来，我在工作的空闲时间尝试编写了一版简单版的Go语言的ORM，功能简单，老哥们可以做参考。">
+<meta name="keywords" content="GolangORM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自己编写Go ORM">
+<meta property="og:url" content="http://yoursite.com/2017/04/28/MyORMToGolang/index.html">
+<meta property="og:site_name" content="芦文超的Blog">
+<meta property="og:description" content="自己编写简易的GoORM Go最近开始变得热门起来，我在工作的空闲时间尝试编写了一版简单版的Go语言的ORM，功能简单，老哥们可以做参考。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-28T07:01:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自己编写Go ORM">
+<meta name="twitter:description" content="自己编写简易的GoORM Go最近开始变得热门起来，我在工作的空闲时间尝试编写了一版简单版的Go语言的ORM，功能简单，老哥们可以做参考。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/28/MyORMToGolang/"/>
+
+
+
+
+
+  <title> 自己编写Go ORM | 芦文超的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">芦文超的Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/MyORMToGolang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="芦文超">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芦文超的Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                自己编写Go ORM
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T14:56:56+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Golang/" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="自己编写简易的GoORM"><a href="#自己编写简易的GoORM" class="headerlink" title="自己编写简易的GoORM"></a>自己编写简易的GoORM</h1><hr>
+<p>Go最近开始变得热门起来，我在工作的空闲时间尝试编写了一版简单版的Go语言的ORM，功能简单，老哥们可以做参考。<br><a id="more"></a></p>
+<h2 id="工具方法以以及主要结构体"><a href="#工具方法以以及主要结构体" class="headerlink" title="工具方法以以及主要结构体"></a>工具方法以以及主要结构体</h2><h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type MySqler struct &#123;</div><div class="line">	User string</div><div class="line">	PassWord string</div><div class="line">	Host string</div><div class="line">	Port string</div><div class="line">	DbName string</div><div class="line">	CharSet string</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="错误处理方法"><a href="#错误处理方法" class="headerlink" title="错误处理方法"></a>错误处理方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func checkErr(i error) &#123;</div><div class="line">	if i!=nil &#123;</div><div class="line">		fmt.Println(i)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>==方法小写私有方法==</p>
+<h3 id="反射参数结构体内容方法"><a href="#反射参数结构体内容方法" class="headerlink" title="反射参数结构体内容方法"></a>反射参数结构体内容方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">func dealStruct(bean interface&#123;&#125;)([]string,[]interface&#123;&#125;,string)&#123;</div><div class="line">	var fieldNames =make([]string,2)</div><div class="line">	var values =make([]interface&#123;&#125;,2)</div><div class="line">	object := reflect.ValueOf(bean)</div><div class="line">	myref := object.Elem()</div><div class="line">	typeOfType := myref.Type()</div><div class="line">	structValues :=strings.Split(typeOfType.Name(),&quot;.&quot;)</div><div class="line">	var tableName string</div><div class="line">	if len(structValues)&gt;1 &#123;</div><div class="line">		tableName = structValues[len(structValues)-1]</div><div class="line">	&#125;else&#123;</div><div class="line">		tableName = structValues[0]</div><div class="line">	&#125;</div><div class="line">	tableName = strings.ToLower(tableName)</div><div class="line">	for i:=0; i&lt;myref.NumField(); i++&#123;</div><div class="line">		field := myref.Field(i)</div><div class="line">		fieldNames[i] = typeOfType.Field(i).Name</div><div class="line">		values[i] = field.Interface()</div><div class="line">	&#125;</div><div class="line">	return fieldNames,values,tableName</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>==方法小写私有方法==</p>
+<h3 id="组织字段参数方法"><a href="#组织字段参数方法" class="headerlink" title="组织字段参数方法"></a>组织字段参数方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">func composeFields(fieldNames []string)string&#123;</div><div class="line">	var fields string</div><div class="line">	for i:=0;i&lt;len(fieldNames);i++  &#123;</div><div class="line">		if i!=len(fieldNames)-1 &#123;</div><div class="line">			fields = fields+strings.ToLower(fieldNames[i])+&quot;,&quot;</div><div class="line">		&#125;else&#123;</div><div class="line">			fields = fields+strings.ToLower(fieldNames[i])</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return fields</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>==方法小写私有方法==</p>
+<h3 id="组织变量参数方法"><a href="#组织变量参数方法" class="headerlink" title="组织变量参数方法"></a>组织变量参数方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">func composeValues(values []interface&#123;&#125;)string&#123;</div><div class="line">	var pars string</div><div class="line">	for i:=0;i&lt;len(values);i++  &#123;</div><div class="line">		if i!=len(values)-1 &#123;</div><div class="line">			pars = pars+&quot;?&quot;+&quot;,&quot;</div><div class="line">		&#125;else&#123;</div><div class="line">			pars = pars+&quot;?&quot;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return pars</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>==方法小写私有方法==</p>
+<h2 id="INSERT"><a href="#INSERT" class="headerlink" title="INSERT"></a>INSERT</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">func (mySqler *MySqler)Insert(bean interface&#123;&#125;)int64&#123;</div><div class="line">	db:=mySqler.getConnection()</div><div class="line">	fieldNames,values,tableName :=dealStruct(bean)</div><div class="line">	fields := composeFields(fieldNames)</div><div class="line">	pars := composeValues(values)</div><div class="line">	sql :=&quot;INSERT into &quot;+tableName+&quot; (&quot;+fields+&quot;) values (&quot;+pars+&quot;)&quot;</div><div class="line">	stmt, err := db.Prepare(sql)</div><div class="line">	checkErr(err)</div><div class="line">	res, err :=stmt.Exec(values[0],values[1])</div><div class="line">	checkErr(err)</div><div class="line">	id, err := res.LastInsertId()</div><div class="line">	checkErr(err)</div><div class="line">	return id</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="QUERY"><a href="#QUERY" class="headerlink" title="QUERY"></a>QUERY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func (mySqler *MySqler)Query(tableName string,condition string)*sql.Rows&#123;</div><div class="line">	db:=mySqler.getConnection()</div><div class="line">	sql :=&quot;SELECT * from &quot;+tableName+&quot; where &quot;+condition</div><div class="line">	fmt.Println(sql)</div><div class="line">	stmt, err := db.Prepare(sql)</div><div class="line">	checkErr(err)</div><div class="line">	resule ,err:=stmt.Query()</div><div class="line">	return resule</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func (mySqler *MySqler)Update(tableName string,change string,condition string)&#123;</div><div class="line">	db:=mySqler.getConnection()</div><div class="line">	//UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值</div><div class="line">	sql :=&quot;UPDATE &quot;+tableName+&quot; SET &quot;+change+&quot; where &quot;+condition</div><div class="line">	stmt, err := db.Prepare(sql)</div><div class="line">	checkErr(err)</div><div class="line">	stmt.Exec()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">func (mySqler *MySqler)Delete(bean interface&#123;&#125;)&#123;</div><div class="line">	db:=mySqler.getConnection()</div><div class="line">	var condition string</div><div class="line">	fieldNames,values,tableName :=dealStruct(bean)</div><div class="line">	//DELETE FROM 表名称 WHERE 列名称 = 值</div><div class="line">	for i:=1;i&lt;len(fieldNames) ;i++  &#123;</div><div class="line">		if i!=len(fieldNames)-1 &#123;</div><div class="line">			condition =condition+fieldNames[i]+&quot; = ? AND&quot;</div><div class="line">		&#125;else&#123;</div><div class="line">			condition =condition+fieldNames[i]+&quot; = ?&quot;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	sql :=&quot;DELETE FROM &quot;+tableName+&quot; WHERE &quot;+condition</div><div class="line">	fmt.Println(sql)</div><div class="line">	stmt, err := db.Prepare(sql)</div><div class="line">	checkErr(err)</div><div class="line">	stmt.Exec(values[1])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="THE-END-ORM的使用方法例子"><a href="#THE-END-ORM的使用方法例子" class="headerlink" title="THE END ORM的使用方法例子"></a>THE END ORM的使用方法例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">type User struct &#123;</div><div class="line">	Id int</div><div class="line">	Name string</div><div class="line">&#125;</div><div class="line">var mysqler dao.MySqler</div><div class="line">func init()&#123;</div><div class="line">	mysqler.CharSet=&quot;utf8&quot;</div><div class="line">	mysqler.DbName=&quot;test_user&quot;</div><div class="line">	mysqler.Host=&quot;localhost&quot;</div><div class="line">	mysqler.Port= &quot;3306&quot;</div><div class="line">	mysqler.PassWord=&quot;root&quot;</div><div class="line">	mysqler.User=&quot;root&quot;</div><div class="line">&#125;</div><div class="line">func main() &#123;</div><div class="line">	//插入数据</div><div class="line">	userInsert :=&amp;User&#123;1,&quot;大帅气&quot;&#125;</div><div class="line">	mysqler.Insert(userInsert)</div><div class="line"></div><div class="line">	//查询数据</div><div class="line">	result :=mysqler.Query(&quot;user&quot;,`name =&quot;dashuaiqi&quot;`)</div><div class="line"></div><div class="line">	//解析数据结果</div><div class="line">	var id int</div><div class="line">	var name string</div><div class="line">	for result.Next()&#123;</div><div class="line">		result.Scan(&amp;id,&amp;name)</div><div class="line">		fmt.Println(id)</div><div class="line">		fmt.Println(name)</div><div class="line">	&#125;</div><div class="line">	defer result.Close()</div><div class="line"></div><div class="line">	//更新数据</div><div class="line">	mysqler.Update(&quot;user&quot;,`name = &quot;lwc&quot;`,`name=&quot;dashuaiqi&quot;`)</div><div class="line"></div><div class="line">	//删除数据</div><div class="line">	userDelete :=&amp;User&#123;1,&quot;大帅气&quot;&#125;</div><div class="line">	mysqler.Delete(userDelete)</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来会抽时间去完善这个ORM，包括注册表等等操作。详细代码可以参考GitHub：<a href="https://github.com/Callmedachang/MyUtils" target="_blank" rel="external">https://github.com/Callmedachang/MyUtils</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GolangORM/" rel="tag"># GolangORM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/04/NIOFilesOpintions/" rel="next" title="NIO文件系统I/O">
+                <i class="fa fa-chevron-left"></i> NIO文件系统I/O
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/28/GoEasyWebFrameWork/" rel="prev" title="GoHttps包完成简易Web框架">
+                GoHttps包完成简易Web框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img.zcool.cn/community/01b8eb580cded1a84a0d304f99f1d0.jpg@900w_1l_2o_100sh.jpg"
+               alt="芦文超" />
+          <p class="site-author-name" itemprop="name">芦文超</p>
+           
+              <p class="site-description motion-element" itemprop="description">你我山前未曾相见,山后亦别重逢。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自己编写简易的GoORM"><span class="nav-number">1.</span> <span class="nav-text">自己编写简易的GoORM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工具方法以以及主要结构体"><span class="nav-number">1.1.</span> <span class="nav-text">工具方法以以及主要结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构体"><span class="nav-number">1.1.1.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误处理方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">错误处理方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反射参数结构体内容方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">反射参数结构体内容方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组织字段参数方法"><span class="nav-number">1.1.4.</span> <span class="nav-text">组织字段参数方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组织变量参数方法"><span class="nav-number">1.1.5.</span> <span class="nav-text">组织变量参数方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INSERT"><span class="nav-number">1.2.</span> <span class="nav-text">INSERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QUERY"><span class="nav-number">1.3.</span> <span class="nav-text">QUERY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UPDATE"><span class="nav-number">1.4.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DELETE"><span class="nav-number">1.5.</span> <span class="nav-text">DELETE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#THE-END-ORM的使用方法例子"><span class="nav-number">1.6.</span> <span class="nav-text">THE END ORM的使用方法例子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">芦文超</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
