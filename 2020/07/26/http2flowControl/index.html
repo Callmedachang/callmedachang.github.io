@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="jvm垃圾回收," />
+  <meta name="keywords" content="network," />
 
 
 
@@ -87,26 +87,18 @@
 
 
 
-<meta name="description" content="JVM垃圾回收算法JVM的垃圾回收算法是JVM中相当重要的一部分。">
-<meta name="keywords" content="jvm垃圾回收">
+<meta name="description" content="HTTP2的流控制协议中怎么说？协议中对流量控制的目的和特点有清晰的描述 Flow control (Section 5.2)helps to ensure that only data that can be used by a receiver is transmitted.   流量控制有助于确保只传播接受者需要使用的数据数据。">
+<meta name="keywords" content="network">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm垃圾回收算法">
-<meta property="og:url" content="http://yoursite.com/2017/03/30/jvm_garbage_collection/index.html">
+<meta property="og:title" content="http2flowControl">
+<meta property="og:url" content="http://yoursite.com/2020/07/26/http2flowControl/index.html">
 <meta property="og:site_name" content="callmedachang&#39;s Blog">
-<meta property="og:description" content="JVM垃圾回收算法JVM的垃圾回收算法是JVM中相当重要的一部分。">
+<meta property="og:description" content="HTTP2的流控制协议中怎么说？协议中对流量控制的目的和特点有清晰的描述 Flow control (Section 5.2)helps to ensure that only data that can be used by a receiver is transmitted.   流量控制有助于确保只传播接受者需要使用的数据数据。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/1.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/2.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/3.1.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/3.2.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/4.1.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/5.1.png">
-<meta property="og:image" content="http://yoursite.com/images/pic/jvmCollectTrash/6.1.png">
-<meta property="og:updated_time" content="2020-07-25T13:45:48.374Z">
+<meta property="og:updated_time" content="2020-07-26T08:30:04.841Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm垃圾回收算法">
-<meta name="twitter:description" content="JVM垃圾回收算法JVM的垃圾回收算法是JVM中相当重要的一部分。">
-<meta name="twitter:image" content="http://yoursite.com/images/pic/jvmCollectTrash/1.png">
+<meta name="twitter:title" content="http2flowControl">
+<meta name="twitter:description" content="HTTP2的流控制协议中怎么说？协议中对流量控制的目的和特点有清晰的描述 Flow control (Section 5.2)helps to ensure that only data that can be used by a receiver is transmitted.   流量控制有助于确保只传播接受者需要使用的数据数据。">
 
 
 
@@ -134,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/03/30/jvm_garbage_collection/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/07/26/http2flowControl/"/>
 
 
 
 
 
-  <title> jvm垃圾回收算法 | callmedachang's Blog </title>
+  <title> http2flowControl | callmedachang's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -269,7 +261,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/30/jvm_garbage_collection/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/26/http2flowControl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="callmedachang">
@@ -290,7 +282,7 @@
             
             
               
-                jvm垃圾回收算法
+                http2flowControl
               
             
           </h1>
@@ -305,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-30T11:33:50+08:00">
-                2017-03-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-26T16:29:35+08:00">
+                2020-07-26
               </time>
             
 
@@ -315,28 +307,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -363,28 +333,34 @@
       
 
       
-        <h1 id="JVM垃圾回收算法"><a href="#JVM垃圾回收算法" class="headerlink" title="JVM垃圾回收算法"></a>JVM垃圾回收算法</h1><p>JVM的垃圾回收算法是JVM中相当重要的一部分。<br><a id="more"></a></p>
-<h2 id="1-引用计数法"><a href="#1-引用计数法" class="headerlink" title="1.引用计数法"></a>1.引用计数法</h2><p><img src="/images/pic/jvmCollectTrash/1.png" alt="image"></p>
-<p>可达对象：通过根对象索引，最终可以达到的对象</p>
-<p>对于对象A被引用一次就+1 失去引用时-1，当对象的计数器为0的时候就会被回收</p>
-<p>缺点：</p>
-<p>1.无法解决循环引用</p>
-<p>2.每一次对象取得引用或者失去引用都会有技术操作影响性能</p>
-<h2 id="2-标记清除法"><a href="#2-标记清除法" class="headerlink" title="2.标记清除法"></a>2.标记清除法</h2><p><img src="/images/pic/jvmCollectTrash/2.png" alt="image"><br>标记阶段：从根对象开始索引 可以被找到的对象就会被标记</p>
-<p>清楚阶段：没有被标记的对象就会被回收</p>
-<p>缺点：回收后的内存空间不是连续的 堆大对象的存储会造成影响</p>
-<h2 id="3-复制算法"><a href="#3-复制算法" class="headerlink" title="3.复制算法"></a>3.复制算法</h2><p>如图在A中进行垃圾回收时，把存活对象复制到B中连续的内存区域中后，清空A区域，并把B作为正在使用的内存块。</p>
-<p><img src="/images/pic/jvmCollectTrash/3.1.png" alt="image">  </p>
-<p>在Java新生代串行垃圾回收器中，使用了辅助算法的思想，分为eden、from、to三个区。其中from、to可视为大小相等、地位相同，可进行角色互换的区域，也成为survivor空间。用于存放未被回收的对象。如下图所示</p>
-<p><img src="/images/pic/jvmCollectTrash/3.2.png" alt="image">  </p>
-<p>在垃圾回收时，eden空间中的存活对象会被复制到未使用的survivor区域中(假设是to)，若to中内存空间不够则会直接进入old区，之后会清空正在使用的survivor(假设是from)，然后交换from与to的角色</p>
-<p>==注意：复制算法一般用于新生代==</p>
-<h2 id="4-标记压缩法"><a href="#4-标记压缩法" class="headerlink" title="4.标记压缩法"></a>4.标记压缩法</h2><p>复制算法的高效是建立在新生代对象朝生夕灭的特性之上的，但是在老年代的对象中大部分对象都将是存活下来的，所以使用复制算法的成本也会比较高。</p>
-<p>标记压缩法是一种老年代的垃圾回收算法。它是标记清楚算法的改良版。与标记清除算法一样，标记压缩法也需要从根节点开始，对所有可达对象做一次标记，但之后并不像标记清楚算法一样仅仅简单的清除未标记对象。而是把所有存活对象压缩到内存的连续区域中，之后清除其他空间。如下图：<br><img src="/images/pic/jvmCollectTrash/4.1.png" alt="image">  </p>
-<p>==注意：标记压缩法适用于老年代==</p>
-<h2 id="5-分代算法"><a href="#5-分代算法" class="headerlink" title="5.分代算法"></a>5.分代算法</h2><p>一般来说新生代的对象大部分会被回收，垃圾回收的时间比较短，频率表较高，而老年代的对象很少会被回收，频率较低，但是扫描老年代的对象耗时远大于新生代。所以为了适应新生代的垃圾回收，虚拟机使用了一种叫做卡表（card table）的数据结构。卡表为一个比特位的集合每一个比特位可以用来表示老年代的某一区域中的所有对象是否包含新生代对象的引用。这样在新生代GC的时候，不用花大量时间扫描整个老年代，而实现扫描卡表，若卡表的标记位为1时再扫描对应的老年代。如下图所示：</p>
-<p><img src="/images/pic/jvmCollectTrash/5.1.png" alt="image">  </p>
-<h2 id="6-分区算法"><a href="#6-分区算法" class="headerlink" title="6.分区算法"></a>6.分区算法</h2><p>分区算法将一整个堆划分成一个个的小块，然后独立回收。优点是可以控制一次回收的数量。<br><img src="/images/pic/jvmCollectTrash/6.1.png" alt="image">  </p>
+        <h1 id="HTTP2的流控制"><a href="#HTTP2的流控制" class="headerlink" title="HTTP2的流控制"></a>HTTP2的流控制</h1><h2 id="协议中怎么说？"><a href="#协议中怎么说？" class="headerlink" title="协议中怎么说？"></a>协议中怎么说？</h2><p><strong>协议中对流量控制的目的和特点有清晰的描述</strong></p>
+<p>Flow control (Section 5.2)helps to ensure that only data that can be used by a receiver is transmitted.  </p>
+<p>流量控制有助于确保只传播接受者需要使用的数据数据。  </p>
+<a id="more"></a>
+<p>HTTP/2 provides for flow control through use of the WINDOW_UPDATE frame (Section 6.9).  </p>
+<p>HTTP/2 利用流来实现多路复用，这引入了对 TCP 连接的使用争夺，会造成流被阻塞。流量控制方案确保在同一连接上的多个流之间不会造成破坏性的干扰。流量控制会用于各个独立的流，也会用于整个连接。  </p>
+<p>HTTP/2 通过使用 WINDOW_UPDATE 帧来进行流量控制。  </p>
+<p>HTTP/2「流」的流量控制的目标是：在不改变协议的情况下允许使用多种流量控制算法。</p>
+<p>HTTP/2 的流量控制具有以下特征：</p>
+<ul>
+<li>流量控制是特定于一个连接的。每种类型的流量控制都是在单独的一跳的两个端点之间的，并不是在整个端到端的路径上的。（这里的一跳指的是 HTTP 连接的一跳，而不是 IP 路由的一跳）</li>
+<li>流量控制是基于 WINDOW_UPDATE帧的。接收方公布自己打算在每个流以及整个连接上分别接收多少字节。这是一个以信用为基础的方案。</li>
+<li>流量控制是有方向的，由接收者全面控制。接收方可以为每个流和整个连接设置任意的窗口大小。发送方必须尊重接收方设置的流量控制限制。客户方、服务端和中间代理作为接收方时都独立地公布各自的流量控制窗口，作为发送方时都遵守对端的流量控制设置。</li>
+<li>无论是新流还是整个连接，流量控制窗口的初始值是 65535 字节。</li>
+<li>帧的类型决定了流量控制是否适用于帧。目前，只有 DATA 帧服从流量控制，所有其它类型的帧并不消耗流量控制窗口的空间。这保证了重要的控制帧不会被流量控制阻塞。</li>
+<li>流量控制不能被禁用。</li>
+<li>HTTP/2 只定义了 WINDOW_UPDATE 帧的格式和语义，并没有规定接收方如何决定何时发送帧、发送什么样的值，也没有规定发送方如何选择发送包。具体实现可以选择任何满足需求的算法。<h2 id="现实中遇到的问题"><a href="#现实中遇到的问题" class="headerlink" title="现实中遇到的问题"></a>现实中遇到的问题</h2>最近在工作中主要从事于公司统一的推送系统的研发，其中有一点是要给大量的额IOS用户推送消息，而Apple提供的推送接口正是基于Http2协议的。</li>
+</ul>
+<p>从监控中发现经常会有及其中堆积大量的gorutine的问题，后用pprof拉取之后发现大量gorutine卡在了http2的流量控制上。</p>
+<p>后使用多个http2Client，根据返回值更新权重的方式来轮训client解决了这个问题。</p>
+<h2 id="进一步探究"><a href="#进一步探究" class="headerlink" title="进一步探究"></a>进一步探究</h2><ol>
+<li><p>发送端保有一个流量控制窗口（window）初始值。初始值的设定请参考 SETTING 帧的 SETTINGS_INITIAL_WINDOW_SIZE</p>
+</li>
+<li><p>发送端每发送一个 DATA 帧，就把 window 递减，递减量为这个帧的大小。如果当前 window 小于帧大小，那么这个帧就必须被拆分到不大于 window，如果 window 等于 0，就不能发送任何帧</p>
+</li>
+<li><p>接收端可以发送 WINDOW_UPDATE 帧给发送端，发送端以帧内指定的 Window Size Increment 作为增量，加到 window 上</p>
+</li>
+</ol>
 
       
     </div>
@@ -414,7 +390,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jvm垃圾回收/" rel="tag"># jvm垃圾回收</a>
+            <a href="/tags/network/" rel="tag"># network</a>
           
         </div>
       
@@ -427,15 +403,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2020/07/26/golangGC/" rel="next" title="golangGC">
+                <i class="fa fa-chevron-left"></i> golangGC
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/31/Hibernate-with-Mybatis/" rel="prev" title="Hibernate与Mybatis的区别">
-                Hibernate与Mybatis的区别 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -564,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM垃圾回收算法"><span class="nav-number">1.</span> <span class="nav-text">JVM垃圾回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引用计数法"><span class="nav-number">1.1.</span> <span class="nav-text">1.引用计数法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-标记清除法"><span class="nav-number">1.2.</span> <span class="nav-text">2.标记清除法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-复制算法"><span class="nav-number">1.3.</span> <span class="nav-text">3.复制算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-标记压缩法"><span class="nav-number">1.4.</span> <span class="nav-text">4.标记压缩法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-分代算法"><span class="nav-number">1.5.</span> <span class="nav-text">5.分代算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-分区算法"><span class="nav-number">1.6.</span> <span class="nav-text">6.分区算法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP2的流控制"><span class="nav-number">1.</span> <span class="nav-text">HTTP2的流控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议中怎么说？"><span class="nav-number">1.1.</span> <span class="nav-text">协议中怎么说？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#现实中遇到的问题"><span class="nav-number">1.2.</span> <span class="nav-text">现实中遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进一步探究"><span class="nav-number">1.3.</span> <span class="nav-text">进一步探究</span></a></li></ol></li></ol></div>
             
 
           </div>
