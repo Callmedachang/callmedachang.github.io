@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="callmedachang&#39;s Blog">
 <meta property="og:description" content="Think Abount 《A Million WebSockets and Go》背景我之前写过一个长链服务，使用的是ws协议。单机的连接数（4c4g）大约在3.2W左右。然后当时看到了《A Million WebSockets and Go》 这边文字。文章作者单机建立了 300W的连接，我当时感到十分诧异，因为但从read、writer、writerChannel、readBuffer、wr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-09-20T04:14:27.609Z">
+<meta property="og:updated_time" content="2020-09-20T04:16:23.884Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Think Abount 《A Million WebSockets and Go》">
 <meta name="twitter:description" content="Think Abount 《A Million WebSockets and Go》背景我之前写过一个长链服务，使用的是ws协议。单机的连接数（4c4g）大约在3.2W左右。然后当时看到了《A Million WebSockets and Go》 这边文字。文章作者单机建立了 300W的连接，我当时感到十分诧异，因为但从read、writer、writerChannel、readBuffer、wr">
@@ -334,6 +334,7 @@
 
       
         <h1 id="Think-Abount-《A-Million-WebSockets-and-Go》"><a href="#Think-Abount-《A-Million-WebSockets-and-Go》" class="headerlink" title="Think Abount 《A Million WebSockets and Go》"></a>Think Abount 《A Million WebSockets and Go》</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我之前写过一个长链服务，使用的是ws协议。单机的连接数（4c4g）大约在3.2W左右。然后当时看到了《A Million WebSockets and Go》 这边文字。文章作者单机建立了 300W的连接，我当时感到十分诧异，因为但从read、writer、writerChannel、readBuffer、writerBuffer等这些资源的创建就需要至少50-80G的内存。带着疑问我读完了作者的文章，所以我想分享一下。</p>
+<a id="more"></a>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p> 首先我列举一下 一个 「ws」连接需要哪些资源</p>
 <ol>
 <li><p>read writer 两个gorutine，也许还会有用来writer的channel</p>
