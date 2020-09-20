@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="callmedachang&#39;s Blog">
 <meta property="og:description" content="Think Abount 《A Million WebSockets and Go》背景我之前写过一个长链服务，使用的是ws协议。单机的连接数（4c4g）大约在3.2W左右。然后当时看到了《A Million WebSockets and Go》 这边文字。文章作者单机建立了 300W的连接，我当时感到十分诧异，因为但从read、writer、writerChannel、readBuffer、wr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-09-20T04:08:05.521Z">
+<meta property="og:updated_time" content="2020-09-20T04:14:27.609Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Think Abount 《A Million WebSockets and Go》">
 <meta name="twitter:description" content="Think Abount 《A Million WebSockets and Go》背景我之前写过一个长链服务，使用的是ws协议。单机的连接数（4c4g）大约在3.2W左右。然后当时看到了《A Million WebSockets and Go》 这边文字。文章作者单机建立了 300W的连接，我当时感到十分诧异，因为但从read、writer、writerChannel、readBuffer、wr">
@@ -405,6 +405,9 @@
 - `net/http`不是处理升级到 WebSocket 的最快方法。**解决方案**：在裸 TCP 连接上使用零拷贝升级。
 
 ## 推荐读物
+
+1. https://github.com/eranyanay/1m-go-websockets
+2. https://github.com/golang/go/issues/15735
 </code></pre>
       
     </div>
